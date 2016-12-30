@@ -10,6 +10,10 @@ require('./favicon.ico');
 import './styles/styles.scss';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
+
 const store = configureStore();
 
 // Create an enhanced history that syncs navigation events with the store

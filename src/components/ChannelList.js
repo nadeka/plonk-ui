@@ -1,5 +1,6 @@
 import React from 'react';
 import Channel from './Channel';
+import AddChannelForm from './AddChannelForm';
 
 class ChannelList extends React.Component {
   constructor(props) {
@@ -7,26 +8,29 @@ class ChannelList extends React.Component {
   }
 
   render() {
-    const { isLoading, channels, joinChannel } = this.props;
+    const { isLoading, channels, selectChannel } = this.props;
 
-    if (isLoading) {
-      return(
-        <p>Loading channels..</p>
+    if (isLoading || !channels) {
+      return (
+        <div>Loading channels..</div>
       );
     }
 
     return(
-      <ul>
-        {
-          channels.map(channel =>
-            <Channel
-              key={channel.id}
-              {...channel}
-              onClick={() => joinChannel(channel.id)}
-            />
-          )
-        }
-      </ul>
+      <div className="channel-list">
+        <ul>
+          {
+            Object.values(channels).map(channel =>
+              <Channel
+                key={channel.id}
+                onClick={() => selectChannel(channel.id)}
+                {...channel}
+              />
+            )
+          }
+        </ul>
+        <AddChannelForm />
+      </div>
     );
   }
 }

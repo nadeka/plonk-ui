@@ -1,15 +1,7 @@
-/* Variables */
-$vin-blue: #5bb7db;
-$vin-green: #60b044;
-$vin-red: #ff0000;
-
-/* Styles */
 body {
-  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: 12px 'Roboto', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
   color: #4d4d4d;
-  min-width: 230px;
-  max-width: 550px;
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
@@ -17,10 +9,68 @@ body {
   font-weight: 300;
 }
 
-td {
-	padding: 12px;
+.form-container {
+  display: -webkit-flex;
+  display: flex;
+  padding: 10px;
 }
 
-h2 {
-	color: $vin-blue;
+.login-form {
+  flex: 1 1 auto;
+  text-align: center;
+  margin: 10px;
+}
+
+.register-form {
+  flex: 1 1 auto;
+  text-align: center;
+  margin: 10px;
+}
+
+.message-header {
+  font-size: 11px;
+}
+
+.main-container {
+  display: -webkit-flex;
+  display: flex;
+  padding: 15px;
+}
+
+.channel-list {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  margin: 15px;
+}
+
+.message-list-content {
+  padding-right: 15px;
+}
+
+.message-list {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+  margin: 10px;
+  max-width: 500px;
+  word-wrap: break-word;
+}
+
+.add-message-form {
+  align-self: flex-end;
+}
+
+.add-channel-form {
+  align-self: flex-end;
+}
+
+ul {
+  list-style-type: none;
 }

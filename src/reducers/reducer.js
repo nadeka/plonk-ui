@@ -2,10 +2,10 @@ import * as types from '../constants/actionTypes';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { combineReducers } from 'redux';
-import merge from 'lodash/merge';
+var _ = require('lodash');
 
 const initialState = {
-  selectedChannel: 1,
+  selectedChannel: null,
   userLoggedIn: null,
   isLoading: true,
   users: [],
@@ -13,6 +13,7 @@ const initialState = {
   channels: []
 };
 
+// TODO split reducer
 function reducer(state = initialState, action) {
   switch (action.type) {
 
@@ -27,31 +28,64 @@ function reducer(state = initialState, action) {
       });
 
     case types.JOIN_SUCCESS:
-      return Object.assign({}, state, {
-        selectedChannel: action.channel,
-        isLoading: false
-      });
+      return _.merge({}, state, action.entities, { isLoading: false });
 
     case types.JOIN_ERROR:
       return Object.assign({}, state, {
         isLoading: false
       });
 
-    case types.REQUEST_MESSAGES:
+    case types.ADDING_MESSAGE:
       return Object.assign({}, state, {
         isLoading: true
       });
 
-    case types.RECEIVE_MESSAGES:
-      return merge({}, state, action.entities, { isLoading: false } );
+    case types.ADD_MESSAGE_SUCCESS:
+      return _.merge({}, state, action.entities, { isLoading: false });
+
+    case types.ADD_MESSAGE_ERROR:
+      return Object.assign({}, state, {
+        isLoading: false
+      });
+
+    case types.ADDING_CHANNEL:
+      return Object.assign({}, state, {
+        isLoading: true
+      });
+
+    case types.ADD_CHANNEL_SUCCESS:
+      return _.merge({}, state, action.entities, { isLoading: false });
+
+    case types.ADD_CHANNEL_ERROR:
+      return Object.assign({}, state, {
+        isLoading: false
+      });
 
     case types.REQUEST_CHANNELS:
       return Object.assign({}, state, {
         isLoading: true
       });
 
-    case types.RECEIVE_CHANNELS:
-      return merge({}, state, action.entities, { isLoading: false } );
+    case types.FETCH_CHANNELS_SUCCESS:
+      return _.merge({}, state, action.entities, { isLoading: false });
+
+    case types.FETCH_CHANNELS_ERROR:
+      return Object.assign({}, state, {
+        isLoading: false
+      });
+
+    case types.REQUEST_USERS:
+      return Object.assign({}, state, {
+        isLoading: true
+      });
+
+    case types.FETCH_USERS_SUCCESS:
+      return _.merge({}, state, action.entities, { isLoading: false });
+
+    case types.FETCH_USERS_ERROR:
+      return Object.assign({}, state, {
+        isLoading: false
+      });
 
     case types.AUTHENTICATE_USER:
       return Object.assign({}, state, {
@@ -60,7 +94,7 @@ function reducer(state = initialState, action) {
 
     case types.AUTHENTICATE_SUCCESS:
       return Object.assign({}, state, {
-        userLoggedIn: action.userId,
+        userLoggedIn: action.userLoggedIn,
         isLoading: false
       });
 
@@ -76,10 +110,7 @@ function reducer(state = initialState, action) {
       });
 
     case types.REGISTER_SUCCESS:
-      return Object.assign({}, state, {
-        userLoggedIn: action.userId,
-        isLoading: false
-      });
+      return _.merge({}, state, action.entities, { isLoading: false, userLoggedIn: action.userLoggedIn });
 
     case types.REGISTER_ERROR:
       return Object.assign({}, state, {

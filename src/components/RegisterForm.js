@@ -2,22 +2,36 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { registerUser } from '../actions/actions';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
 class RegisterForm extends React.Component {
+
+  // TODO show form errors
   render() {
     return (
-      <div>
+      <div className="register-form">
         <h1>Register</h1>
         <form onSubmit={this.props.handleSubmit}>
           <div>
-            <label htmlFor="name">Name</label>
-            <Field name="name" component="input" type="text"/>
+            <Field name="name" component={name =>
+              <TextField hintText = "Name"
+                         floatingLabelText="Name"
+                         type="text"
+                         {...name.input}
+              />
+            }/>
           </div>
           <div>
-            <label htmlFor="password">Password</label>
-            <Field name="password" component="input" type="password"/>
+            <Field name="password" component={password =>
+              <TextField hintText="Password"
+                         floatingLabelText="Password"
+                         type="password"
+                         {...password.input}
+              />
+            }/>
           </div>
-          <button type="submit">Submit</button>
+          <FlatButton label="Register" primary={true} type="submit"></FlatButton>
         </form>
       </div>
     );

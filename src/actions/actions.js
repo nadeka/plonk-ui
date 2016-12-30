@@ -31,6 +31,23 @@ user.define({
   messages: arrayOf(message)
 });
 
+// TODO split actions
+export function openConnection(client) {
+  return function(dispatch) {
+    client.connect({ auth: { headers: { authorization: 'Bearer ' + cookie.load('login_info').token } } }, function (err) {
+      dispatch(connectionSuccess(client));
+    });
+  }
+}
+
+export function connectionSuccess(client) {
+  return function(dispatch) {
+    client.request('/channels', function (err, payload) {
+      console.log(payload);
+    });
+  }
+}
+
 // Actions
 export function selectChannel(channel) {
   return {
@@ -39,38 +56,55 @@ export function selectChannel(channel) {
   }
 }
 
-export function requestMessages(channel) {
+export function addingMessage() {
   return {
-    type: types.REQUEST_MESSAGES,
-    channel
+    type: types.ADDING_MESSAGE
   }
 }
 
-export function fetchMessages(channel) {
+export function addMessage(content, channelid) {
   return function(dispatch) {
-    dispatch(requestMessages(channel));
+    dispatch(addingMessage());
 
-    let url = API_BASE_URL + `/channels/${channel}/messages`;
+    let url = API_BASE_URL + `/channels/${ channelid }/messages`;
 
     let headers = {
+      'Content-Type': 'application/json',
       'authorization': 'Bearer ' + cookie.load('login_info').token
     };
 
+    let payload = {
+      content: content
+    };
+
     return fetch(url, {
-        method: 'GET',
-        headers: headers
-    }).then(res => res.json())
-      .then(messages => console.log(messages))
-      .then(messages => dispatch(receiveMessages(channel, normalize(messages, arrayOf(message)))))
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(payload)
+    }).then(function(res) {
+      if (res.ok) {
+        res.json()
+          .then(function(json) {
+            dispatch(addMessageSuccess(normalize(json, message)));
+          })
+      } else {
+        dispatch(addMessageError());
+      }
+    })
       .catch(err => console.log(err));
   }
 }
 
-export function receiveMessages(channel, json) {
+export function addMessageSuccess(json) {
   return {
-    type: types.RECEIVE_MESSAGES,
-    channel,
+    type: types.ADD_MESSAGE_SUCCESS,
     entities: json.entities
+  }
+}
+
+export function addMessageError() {
+  return {
+    type: types.ADD_MESSAGE_ERROR
   }
 }
 
@@ -80,8 +114,9 @@ export function requestChannels() {
   }
 }
 
+//TODO fetch only when not in state
 export function fetchChannels() {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(requestChannels());
 
     let url = API_BASE_URL + `/channels`;
@@ -93,15 +128,77 @@ export function fetchChannels() {
     return fetch(url, {
       method: 'GET',
       headers: headers
-    }).then(res => res.json())
-      .then(channels => dispatch(receiveChannels(normalize(channels, arrayOf(channel)))))
+    }).then(function (res) {
+      if (res.ok) {
+        res.json()
+          .then(function(json) {
+            dispatch(fetchChannelsSuccess(normalize(json, arrayOf(channel))));
+          });
+      } else {
+        dispatch(fetchChannelsError());
+      }
+    })
       .catch(err => console.log(err));
   }
 }
 
-export function receiveChannels(json) {
+export function fetchChannelsSuccess(json) {
   return {
-    type: types.RECEIVE_CHANNELS,
+    type: types.FETCH_CHANNELS_SUCCESS,
+    entities: json.entities
+  }
+}
+
+export function fetchChannelsError(json) {
+  return {
+    type: types.FETCH_CHANNELS_ERROR,
+    entities: json.entities
+  }
+}
+
+export function requestUsers() {
+  return {
+    type: types.REQUEST_USERS
+  }
+}
+
+export function fetchUsers() {
+  return function (dispatch) {
+    dispatch(requestUsers());
+
+    let url = API_BASE_URL + `/users`;
+
+    let headers = {
+      'authorization': 'Bearer ' + cookie.load('login_info').token
+    };
+
+    return fetch(url, {
+      method: 'GET',
+      headers: headers
+    }).then(function (res) {
+      if (res.ok) {
+        res.json()
+          .then(function(json) {
+            dispatch(fetchUsersSuccess(normalize(json, arrayOf(user))));
+          });
+      } else {
+        dispatch(fetchUsersError());
+      }
+    })
+      .catch(err => console.log(err));
+  }
+}
+
+export function fetchUsersSuccess(json) {
+  return {
+    type: types.FETCH_USERS_SUCCESS,
+    entities: json.entities
+  }
+}
+
+export function fetchUsersError(json) {
+  return {
+    type: types.FETCH_USERS_ERROR,
     entities: json.entities
   }
 }
@@ -112,27 +209,25 @@ export function joiningChannel() {
   }
 }
 
-export function joinChannel(channel) {
+export function joinChannel(channelid) {
   return function(dispatch) {
     dispatch(joiningChannel());
 
-    let url = API_BASE_URL + `/channels/${channel}/join`;
+    let url = API_BASE_URL + `/channels/${channelid}/join`;
 
     let headers = {
       'authorization': 'Bearer ' + cookie.load('login_info').token
     };
 
-    let payload = {
-      userid: cookie.load('login_info').userid
-    };
-
     return fetch(url, {
       method: 'POST',
-      body: JSON.stringify(payload),
       headers: headers
     }).then(function(res) {
       if (res.ok) {
-        dispatch(joinSuccess(channel, payload.userid));
+        res.json()
+          .then(function(json) {
+            dispatch(joinSuccess(normalize(json, channel)));
+          });
       } else {
         dispatch(joinError());
       }
@@ -141,19 +236,69 @@ export function joinChannel(channel) {
   }
 }
 
-export function joinError(channel, user) {
+export function joinSuccess(json) {
   return {
-    type: types.JOIN_ERROR,
-    channel: channel,
-    user: user
+    type: types.JOIN_SUCCESS,
+    entities: json.entities
   }
 }
 
-export function joinSuccess(channel, user) {
+export function joinError() {
   return {
-    type: types.JOIN_SUCCESS,
-    channel: channel,
-    user: user
+    type: types.JOIN_ERROR
+  }
+}
+
+export function addingChannel() {
+  return {
+    type: types.ADDING_CHANNEL
+  }
+}
+
+export function addChannel(name) {
+  return function(dispatch) {
+    dispatch(addingChannel());
+
+    let url = API_BASE_URL + `/channels`;
+
+    let headers = {
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer ' + cookie.load('login_info').token
+    };
+
+    let payload = {
+      name: name,
+      private: false
+    };
+
+    return fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(payload)
+    }).then(function(res) {
+      if (res.ok) {
+        res.json()
+          .then(function(json) {
+            dispatch(addChannelSuccess(normalize(json, channel)));
+          })
+      } else {
+        dispatch(addChannelError());
+      }
+    })
+      .catch(err => console.log(err));
+  }
+}
+
+export function addChannelSuccess(json) {
+  return {
+    type: types.ADD_CHANNEL_SUCCESS,
+    entities: json.entities
+  }
+}
+
+export function addChannelError() {
+  return {
+    type: types.ADD_CHANNEL_ERROR
   }
 }
 
@@ -192,10 +337,10 @@ export function authenticateUser(payload) {
   }
 }
 
-export function authenticateSuccess(userId) {
+export function authenticateSuccess(userid) {
   return {
     type: types.AUTHENTICATE_SUCCESS,
-    userId: userId
+    userLoggedIn: userid
   }
 }
 
@@ -215,7 +360,7 @@ export function registerUser(payload) {
   return function(dispatch) {
     dispatch(registeringUser());
 
-    let url = API_BASE_URL + `/users`;
+    let url = API_BASE_URL + `/register`;
 
     let headers = {
       'Content-Type': 'application/json'
@@ -229,8 +374,8 @@ export function registerUser(payload) {
         if (res.ok) {
           res.json()
             .then(function(json) {
-              cookie.save('login_info', JSON.stringify(json));
-              dispatch(registerSuccess(json.userid));
+              cookie.save('login_info', JSON.stringify({ userid: json.user.id, token: json.token }));
+              dispatch(registerSuccess(normalize(json.user, user), json.user.id));
             })
         } else {
           dispatch(registerError());
@@ -240,10 +385,11 @@ export function registerUser(payload) {
   }
 }
 
-export function registerSuccess(userId) {
+export function registerSuccess(json, userid) {
   return {
     type: types.REGISTER_SUCCESS,
-    userId: userId
+    entities: json.entities,
+    userLoggedIn: userid
   }
 }
 

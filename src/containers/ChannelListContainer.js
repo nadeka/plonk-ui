@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ChannelList from '../components/ChannelList';
-import { fetchChannels, joinChannel } from '../actions/actions';
+import { fetchChannels, selectChannel } from '../actions/actions';
 
 export class ChannelListContainer extends React.Component {
   constructor(props) {
@@ -28,10 +28,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchChannels: () => {
-      dispatch(fetchChannels())
+      dispatch(fetchChannels());
     },
-    joinChannel: (id) => {
-      dispatch(joinChannel(id))
+    selectChannel: (channel) => {
+      dispatch(selectChannel(channel));
     }
   }
 };

@@ -1,21 +1,49 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import MessageList from '../components/MessageList';
-import { fetchMessages } from '../actions/actions';
+import { joinChannel } from '../actions/actions';
+import FlatButton from 'material-ui/FlatButton';
 
 export class MessageListContainer extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.fetchMessages(this.props.selectedChannel);
+  render() {
+    const {
+      isLoading,
+      selectedChannel,
+      joinChannel,
+      userLoggedIn,
+      messages,
+      channels
+    } = this.props;
+
+    if (isLoading || !selectedChannel || !messages) {
+      return(
+        <div></div>
+      );
+    }
+
+    if (!this.userBelongsToChannel(userLoggedIn, channels[selectedChannel])) {
+      return(
+        <div className="join-button">
+          <FlatButton
+            label={"Join " + channels[selectedChannel].name} onClick={() => joinChannel(selectedChannel)}>
+          </FlatButton>
+        </div>
+      );
+    }
+
+    return(
+      <div>
+        <MessageList {...this.props} />
+      </div>
+    );
   }
 
-  render() {
-    return(
-      <MessageList {...this.props} />
-    );
+  userBelongsToChannel(userLoggedIn, channel) {
+    return channel && channel.users && channel.users.find(id => id === userLoggedIn);
   }
 }
 
@@ -23,14 +51,17 @@ const mapStateToProps = (state) => {
   return {
     messages: state.reducer.messages,
     selectedChannel: state.reducer.selectedChannel,
+    userLoggedIn: state.reducer.userLoggedIn,
+    channels: state.reducer.channels,
+    users: state.reducer.users,
     isLoading: state.reducer.isLoading
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchMessages: (channel) => {
-      dispatch(fetchMessages(channel))
+    joinChannel: (id) => {
+      dispatch(joinChannel(id))
     }
   }
 };
