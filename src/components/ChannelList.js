@@ -16,6 +16,8 @@ class ChannelList extends React.Component {
       );
     }
 
+    console.log(channels);
+
     return(
       <div className="channel-list">
         <ul>

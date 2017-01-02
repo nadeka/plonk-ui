@@ -35,6 +35,7 @@ user.define({
 export function openConnection(client) {
   return function(dispatch) {
     client.connect({ auth: { headers: { authorization: 'Bearer ' + cookie.load('login_info').token } } }, function (err) {
+      // TODO handle errors
       dispatch(connectionSuccess(client));
     });
   }
@@ -42,10 +43,22 @@ export function openConnection(client) {
 
 export function connectionSuccess(client) {
   return function(dispatch) {
-    client.request('/channels', function (err, payload) {
-      console.log(payload);
+    client.request('/channels', function (err, channels) {
+      dispatch(fetchChannelsSuccess(normalize(channels, arrayOf(channel))));
     });
-  }
+
+    client.subscribe('/new-channel', function (newChannel, flags) {
+      dispatch(addChannelSuccess(normalize(newChannel, channel)));
+    }, function (err) { });
+
+    client.subscribe('/new-message', function (newMessage, flags) {
+      dispatch(addMessageSuccess(normalize(newMessage, message)));
+    }, function (err) { });
+
+    client.subscribe('/user-joined', function (updatedChannel, flags) {
+      dispatch(joinSuccess(normalize(updatedChannel, channel)));
+    }, function (err) { });
+  };
 }
 
 // Actions
@@ -83,10 +96,10 @@ export function addMessage(content, channelid) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        res.json()
-          .then(function(json) {
-            dispatch(addMessageSuccess(normalize(json, message)));
-          })
+        // res.json()
+        //   .then(function(json) {
+        //     dispatch(addMessageSuccess(normalize(json, message)));
+        //   })
       } else {
         dispatch(addMessageError());
       }
@@ -130,10 +143,10 @@ export function fetchChannels() {
       headers: headers
     }).then(function (res) {
       if (res.ok) {
-        res.json()
-          .then(function(json) {
-            dispatch(fetchChannelsSuccess(normalize(json, arrayOf(channel))));
-          });
+        // res.json()
+        //   .then(function(json) {
+        //     dispatch(fetchChannelsSuccess(normalize(json, arrayOf(channel))));
+        //   });
       } else {
         dispatch(fetchChannelsError());
       }
@@ -177,10 +190,10 @@ export function fetchUsers() {
       headers: headers
     }).then(function (res) {
       if (res.ok) {
-        res.json()
-          .then(function(json) {
-            dispatch(fetchUsersSuccess(normalize(json, arrayOf(user))));
-          });
+        // res.json()
+        //   .then(function(json) {
+        //     dispatch(fetchUsersSuccess(normalize(json, arrayOf(user))));
+        //   });
       } else {
         dispatch(fetchUsersError());
       }
@@ -224,10 +237,10 @@ export function joinChannel(channelid) {
       headers: headers
     }).then(function(res) {
       if (res.ok) {
-        res.json()
-          .then(function(json) {
-            dispatch(joinSuccess(normalize(json, channel)));
-          });
+        // res.json()
+        //   .then(function(json) {
+        //     dispatch(joinSuccess(normalize(json, channel)));
+        //   });
       } else {
         dispatch(joinError());
       }
@@ -277,10 +290,10 @@ export function addChannel(name) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        res.json()
-          .then(function(json) {
-            dispatch(addChannelSuccess(normalize(json, channel)));
-          })
+        // res.json()
+        //   .then(function(json) {
+        //     dispatch(addChannelSuccess(normalize(json, channel)));
+        //   })
       } else {
         dispatch(addChannelError());
       }

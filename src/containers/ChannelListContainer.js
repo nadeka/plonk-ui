@@ -1,15 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ChannelList from '../components/ChannelList';
-import { fetchChannels, selectChannel } from '../actions/actions';
+import { selectChannel } from '../actions/actions';
 
 export class ChannelListContainer extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    this.props.fetchChannels();
   }
 
   render() {
@@ -27,9 +23,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchChannels: () => {
-      dispatch(fetchChannels());
-    },
     selectChannel: (channel) => {
       dispatch(selectChannel(channel));
     }
