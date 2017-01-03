@@ -5,22 +5,22 @@ import { addChannel } from '../actions/actions';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
+const addButtonStyle = {
+  color: '#33D033'
+};
+
 class AddChannelForm extends React.Component {
   render() {
     return (
-      <div className="add-channel-form">
-        <form onSubmit={this.props.handleSubmit}>
-          <div>
-            <Field name="name" component={name =>
-              <TextField hintText="Name"
-                         type="text"
-                         {...name.input}
-              />
-            }/>
-            <FlatButton label="Add channel" type="submit" />
-          </div>
-        </form>
-      </div>
+      <form className="add-channel-form" onSubmit={this.props.handleSubmit}>
+        <Field name="name" component={name =>
+          <TextField hintText="Name"
+                     type="text"
+                     {...name.input}
+          />
+        }/>
+        <FlatButton labelStyle={addButtonStyle} label="Add channel" type="submit" />
+      </form>
     );
   }
 }

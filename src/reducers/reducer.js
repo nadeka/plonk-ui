@@ -8,6 +8,7 @@ const initialState = {
   selectedChannel: null,
   userLoggedIn: null,
   isLoading: true,
+  channelsWithNewMessages: {},
   users: [],
   messages: [],
   channels: []
@@ -18,8 +19,13 @@ function reducer(state = initialState, action) {
   switch (action.type) {
 
     case types.SELECT_CHANNEL:
+      let copy = Object.assign({}, state.channelsWithNewMessages);
+      delete copy[action.channel];
+      delete copy[state.selectedChannel];
+
       return Object.assign({}, state, {
-        selectedChannel: action.channel
+        selectedChannel: action.channel,
+        channelsWithNewMessages: copy
       });
 
     case types.JOINING_CHANNEL:

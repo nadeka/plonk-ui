@@ -1,10 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import MessageList from '../components/MessageList';
+import UserList from '../components/UserList';
 import { joinChannel } from '../actions/actions';
 import FlatButton from 'material-ui/FlatButton';
 
-export class MessageListContainer extends React.Component {
+const joinButtonStyle = {
+  color: '#33D033'
+};
+
+export class ChannelContainer extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -19,7 +24,7 @@ export class MessageListContainer extends React.Component {
       channels
     } = this.props;
 
-    if (isLoading || !selectedChannel || !messages) {
+    if (isLoading || !selectedChannel) {
       return(
         <div></div>
       );
@@ -29,15 +34,18 @@ export class MessageListContainer extends React.Component {
       return(
         <div className="join-button">
           <FlatButton
-            label={"Join " + channels[selectedChannel].name} onClick={() => joinChannel(selectedChannel)}>
+            labelStyle={joinButtonStyle}
+            label={"Join " + channels[selectedChannel].name}
+            onClick={() => joinChannel(selectedChannel)}>
           </FlatButton>
         </div>
       );
     }
 
     return(
-      <div>
+      <div className="channel-page">
         <MessageList {...this.props} />
+        <UserList {...this.props} />
       </div>
     );
   }
@@ -69,4 +77,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MessageListContainer);
+)(ChannelContainer);

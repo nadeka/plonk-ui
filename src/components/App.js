@@ -3,7 +3,7 @@ import Nes from 'nes/client';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Link, IndexLink } from 'react-router';
-import MessageListContainer from '../containers/MessageListContainer';
+import ChannelContainer from '../containers/ChannelContainer';
 import ChannelListContainer from '../containers/ChannelListContainer';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
@@ -43,9 +43,6 @@ class App extends React.Component {
         <MuiThemeProvider>
         <div className="form-container">
           <LoginForm />
-          <br/>
-          <br/>
-          <br/>
           <RegisterForm />
         </div>
         </MuiThemeProvider>
@@ -56,10 +53,7 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div className="main-container">
           <ChannelListContainer />
-          <MessageListContainer />
-
-          <br/>
-          {this.props.children}
+          <ChannelContainer />
         </div>
       </MuiThemeProvider>
     );

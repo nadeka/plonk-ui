@@ -52,7 +52,14 @@ export function connectionSuccess(client) {
     }, function (err) { });
 
     client.subscribe('/new-message', function (newMessage, flags) {
-      dispatch(addMessageSuccess(normalize(newMessage, message)));
+      let entities = normalize(newMessage, message);
+
+      // TODO better solution for notifications on unread messages
+      entities.entities.channelsWithNewMessages = {};
+
+      entities.entities.channelsWithNewMessages[newMessage.channelid] = newMessage.channelid;
+
+      dispatch(addMessageSuccess(entities));
     }, function (err) { });
 
     client.subscribe('/user-joined', function (updatedChannel, flags) {
@@ -340,7 +347,7 @@ export function authenticateUser(payload) {
         res.json()
           .then(function(json) {
             cookie.save('login_info', JSON.stringify(json));
-            dispatch(authenticateSuccess(json.userid));
+            dispatch(authenticateSuccess(json.user.id));
           })
       } else {
         dispatch(authenticateError());

@@ -17,7 +17,10 @@ export class ChannelListContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    channels: state.reducer.channels
+    channels: state.reducer.channels,
+    userLoggedIn: state.reducer.userLoggedIn,
+    selectedChannel: state.reducer.selectedChannel,
+    channelsWithNewMessages: state.reducer.channelsWithNewMessages
   }
 };
 

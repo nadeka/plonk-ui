@@ -1,7 +1,9 @@
 import React from 'react';
-import Message from './Message';
 import AddMessageForm from './AddMessageForm';
 import ScrollArea from 'react-scrollbar';
+import { ListItem, List } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import moment from 'moment';
 
 class MessageList extends React.Component {
   constructor(props) {
@@ -16,30 +18,29 @@ class MessageList extends React.Component {
     } = this.props;
 
     return(
-      <div>
-        <div className="message-list">
-          <ScrollArea
-            speed={0.8}
-            className="message-list-scroll-area"
-            contentClassName="message-list-content"
-            horizontal={false}
-            smoothScrolling={true}
-          >
-            <ul>
-              {
-                Object.values(messages)
-                  .filter(message => message.channelid === selectedChannel)
-                  .map(message =>
-                    <Message
-                      key={message.id}
-                      sender={users[messages[message.id].userid].name}
-                      {...message}
-                    />
-                  )
-              }
-            </ul>
-          </ScrollArea>
-        </div>
+      <div className="message-list">
+        <Subheader>Messages</Subheader>
+        <ScrollArea
+          speed={0.8}
+          className="message-list-scroll-area"
+          contentClassName="message-list-content"
+          horizontal={false}
+          smoothScrolling={true}
+        >
+          <List>
+            {
+              Object.values(messages)
+                .filter(message => message.channelid === selectedChannel)
+                .map(message =>
+                  <ListItem
+                    key={message.id}
+                    primaryText={users[message.userid].name + ' ' + moment(message.createdat).format('DD.MM. h:mm a')}
+                    secondaryText={message.content}
+                  />
+                )
+            }
+          </List>
+        </ScrollArea>
         <AddMessageForm
           selectedChannel={selectedChannel}
         />

@@ -16,6 +16,6 @@ class Message extends React.Component {
       </li>
     );
   }
-};
+}
 
 export default Message;

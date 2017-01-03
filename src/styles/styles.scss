@@ -1,30 +1,33 @@
+// TODO make everything responsive
 body {
   font: 12px 'Roboto', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  color: #4d4d4d;
-  margin: 0 auto;
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
   font-smoothing: antialiased;
   font-weight: 300;
+  margin: 20px;
+}
+
+h2 {
+  margin-bottom: 1.5em;
 }
 
 .form-container {
   display: -webkit-flex;
   display: flex;
-  padding: 10px;
 }
 
 .login-form {
   flex: 1 1 auto;
   text-align: center;
-  margin: 10px;
+  margin: 2em;
 }
 
 .register-form {
   flex: 1 1 auto;
   text-align: center;
-  margin: 10px;
+  margin: 2em;
 }
 
 .message-header {
@@ -34,43 +37,62 @@ body {
 .main-container {
   display: -webkit-flex;
   display: flex;
-  padding: 15px;
+}
+
+.message-list-content, .channel-list-content, .user-list-content {
+  padding-right: 8px;
 }
 
 .channel-list {
+  position: fixed;
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  margin: 15px;
-}
-
-.message-list-content {
-  padding-right: 15px;
-}
-
-.message-list {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  -webkit-justify-content: flex-end;
-  justify-content: flex-end;
-  margin: 10px;
-  max-width: 500px;
+  height: 600px;
+  max-width: 200px;
   word-wrap: break-word;
 }
 
+.channel-page, .join-button {
+  margin-left: 400px;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.message-list {
+  position: fixed;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  height: 600px;
+  width: 600px;
+  word-wrap: break-word;
+}
+
+.user-list {
+  margin-left: 700px;
+  word-wrap: break-word;
+  height: 600px;
+  position: fixed;
+}
+
+// TODO position text fields to bottom of screen without problems
 .add-message-form {
-  align-self: flex-end;
+  position: fixed;
+  bottom: 0;
+  background: white;
 }
 
 .add-channel-form {
-  align-self: flex-end;
+  position: fixed;
+  bottom: 0;
+  background: white;
 }
 
 ul {
   list-style-type: none;
+  text-align: left;
+  padding: 0;
 }

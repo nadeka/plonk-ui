@@ -5,22 +5,22 @@ import { addMessage } from '../actions/actions';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
+const addButtonStyle = {
+  color: '#33D033'
+};
+
 class AddMessageForm extends React.Component {
   render() {
     return (
-      <div className="add-message-form">
-        <form onSubmit={this.props.handleSubmit}>
-          <div>
-            <Field name="content" component={content =>
-              <TextField hintText="Message"
-                         type="text"
-                         {...content.input}
-              />
-            }/>
-            <FlatButton label="Send" type="submit" />
-          </div>
-        </form>
-      </div>
+      <form className="add-message-form" onSubmit={this.props.handleSubmit}>
+        <Field name="content" component={content =>
+          <TextField hintText="Message"
+                     type="text"
+                     {...content.input}
+          />
+        }/>
+        <FlatButton labelStyle={addButtonStyle} label="Send" type="submit" />
+      </form>
     );
   }
 }
