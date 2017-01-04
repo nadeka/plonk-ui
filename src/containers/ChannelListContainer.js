@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ChannelList from '../components/ChannelList';
-import { selectChannel } from '../actions/actions';
+import { selectChannel } from '../actions/channels';
 
 export class ChannelListContainer extends React.Component {
   constructor(props) {

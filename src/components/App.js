@@ -2,36 +2,29 @@ import React from 'react';
 import Nes from 'nes/client';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Link, IndexLink } from 'react-router';
 import ChannelContainer from '../containers/ChannelContainer';
 import ChannelListContainer from '../containers/ChannelListContainer';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import cookie from 'react-cookie';
-import { authenticateSuccess, openConnection } from '../actions/actions';
-
-const WS_BASE_URL =
-  process.env.NODE_ENV !== 'production' ?
-    'ws://localhost:6001' :
-    'ws://plonk.eu-west-1.elasticbeanstalk.com';
+import { verifyToken } from '../actions/auth';
+import { openConnection, closeConnection } from '../actions/websocket';
 
 // This is a class-based component because the current
 // version of hot reloading won't hot reload a stateless
 // component at the top-level.
 class App extends React.Component {
 
-  // TODO actually verify the token
   componentDidMount() {
-    if (!this.props.userLoggedIn && cookie.load('login_info') && cookie.load('login_info').token) {
-      this.props.authenticateSuccess(cookie.load('login_info').userid);
+    if (!this.props.userLoggedIn) {
+      this.props.closeConnection();
+      this.props.verifyToken();
     }
   }
 
   componentDidUpdate() {
-    if (this.props.userLoggedIn && cookie.load('login_info') && cookie.load('login_info').token) {
-      let client = new Nes.Client(WS_BASE_URL);
-
-      this.props.openConnection(client);
+    if (this.props.userLoggedIn) {
+      this.props.openConnection();
     }
   }
 
@@ -68,11 +61,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    authenticateSuccess: (id) => {
-      dispatch(authenticateSuccess(id))
+    verifyToken: (token) => {
+      dispatch(verifyToken(token))
     },
-    openConnection: (client) => {
-      dispatch(openConnection(client));
+    openConnection: () => {
+      dispatch(openConnection());
+    },
+    closeConnection: () => {
+      dispatch(closeConnection());
     }
   };
 };

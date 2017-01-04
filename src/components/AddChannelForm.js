@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset } from 'redux-form';
-import { addChannel } from '../actions/actions';
+import { addChannel } from '../actions/channels';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 

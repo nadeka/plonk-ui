@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MessageList from '../components/MessageList';
 import UserList from '../components/UserList';
-import { joinChannel } from '../actions/actions';
+import { joinChannel } from '../actions/channels';
 import FlatButton from 'material-ui/FlatButton';
 
 const joinButtonStyle = {

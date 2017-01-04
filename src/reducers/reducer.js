@@ -67,7 +67,7 @@ function reducer(state = initialState, action) {
         isLoading: false
       });
 
-    case types.REQUEST_CHANNELS:
+    case types.FETCHING_CHANNELS:
       return Object.assign({}, state, {
         isLoading: true
       });
@@ -80,7 +80,7 @@ function reducer(state = initialState, action) {
         isLoading: false
       });
 
-    case types.REQUEST_USERS:
+    case types.FETCHING_USERS:
       return Object.assign({}, state, {
         isLoading: true
       });
@@ -93,7 +93,7 @@ function reducer(state = initialState, action) {
         isLoading: false
       });
 
-    case types.AUTHENTICATE_USER:
+    case types.AUTHENTICATING_USER:
       return Object.assign({}, state, {
         isLoading: true
       });

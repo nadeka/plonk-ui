@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { authenticateUser } from '../actions/actions';
+import { authenticateUser } from '../actions/auth';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
