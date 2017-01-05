@@ -49,6 +49,7 @@ export function connectionSuccess() {
       }
     }, function (err, channels) {
       if (err) {
+        console.log(err);
         dispatch(fetchChannelsError());
       }
       else {

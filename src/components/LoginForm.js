@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { authenticateUser } from '../actions/auth';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
+import renderTextField from './TextField';
 
 class LoginForm extends React.Component {
 
@@ -14,22 +14,10 @@ class LoginForm extends React.Component {
         <h1>Login</h1>
         <form onSubmit={this.props.handleSubmit}>
           <div>
-            <Field name="name" component={name =>
-              <TextField hintText = "Name"
-                         floatingLabelText="Name"
-                         type="text"
-                         {...name.input}
-              />
-            }/>
+            <Field name="name" label="Name" component={renderTextField} />
           </div>
           <div>
-            <Field name="password" component={password =>
-              <TextField hintText="Password"
-                         floatingLabelText="Password"
-                         type="password"
-                         {...password.input}
-              />
-            }/>
+            <Field name="password" label="Password" component={renderTextField} />
           </div>
           <FlatButton label="Log in" type="submit" primary={true} />
         </form>

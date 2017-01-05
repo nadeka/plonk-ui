@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, reset } from 'redux-form';
 import { addChannel } from '../actions/channels';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
+import renderTextField from './TextField';
 
 const addButtonStyle = {
   color: '#33D033'
@@ -13,12 +13,7 @@ class AddChannelForm extends React.Component {
   render() {
     return (
       <form className="add-channel-form" onSubmit={this.props.handleSubmit}>
-        <Field name="name" component={name =>
-          <TextField hintText="Name"
-                     type="text"
-                     {...name.input}
-          />
-        }/>
+        <Field name="name" label="Name" component={renderTextField} />
         <FlatButton labelStyle={addButtonStyle} label="Add channel" type="submit" />
       </form>
     );
