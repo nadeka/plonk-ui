@@ -11,13 +11,13 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="login-form">
-        <h1>Login</h1>
+        <h1>Log in</h1>
         <form onSubmit={this.props.handleSubmit}>
           <div>
-            <Field name="name" label="Name" component={renderTextField} />
+            <Field name="name" label="Name" type="text" component={renderTextField} />
           </div>
           <div>
-            <Field name="password" label="Password" component={renderTextField} />
+            <Field name="password" label="Password" type="password" component={renderTextField} />
           </div>
           <FlatButton label="Log in" type="submit" primary={true} />
         </form>

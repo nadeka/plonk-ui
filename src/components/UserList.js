@@ -3,6 +3,10 @@ import ScrollArea from 'react-scrollbar';
 import Subheader from 'material-ui/Subheader';
 import { ListItem, List } from 'material-ui/List';
 
+const subheaderStyle = {
+  fontSize: 18
+};
+
 class UserList extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +21,7 @@ class UserList extends React.Component {
 
     return(
       <div className="user-list">
-        <Subheader>Members</Subheader>
+        <Subheader style={subheaderStyle}>Members</Subheader>
         <ScrollArea
           speed={0.8}
           className="user-list-scroll-area"

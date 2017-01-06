@@ -13,8 +13,30 @@ class AddChannelForm extends React.Component {
   render() {
     return (
       <form className="add-channel-form" onSubmit={this.props.handleSubmit}>
-        <Field name="name" label="Name" component={renderTextField} />
-        <FlatButton labelStyle={addButtonStyle} label="Add channel" type="submit" />
+        <div>
+          <Field name="name" label="Name" component={renderTextField} />
+        </div>
+        <br/>
+        <div>
+          <label htmlFor="private">Private</label>
+          <Field name="private" id="private" component="input" type="checkbox"/>
+        </div>
+        <br/>
+        <div style={{ textAlign: 'right', padding: 8, margin: '24px -24px -24px -24px' }}>
+          <FlatButton
+            label="Cancel"
+            secondary={true}
+            onTouchTap={this.props.handleClose}
+          />
+          <FlatButton
+            label="Create"
+            primary={true}
+            type="submit"
+            keyboardFocused={true}
+            onTouchTap={this.props.handleClose}
+            style={addButtonStyle}
+          />
+        </div>
       </form>
     );
   }
@@ -27,14 +49,18 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmit: (values) => {
-      dispatch(addChannel(values.name));
+      dispatch(addChannel(values));
       dispatch(reset('addChannel'));
+    },
+    handleClose: () => {
+      ownProps.handleClose();
     }
   }
 };
 
 AddChannelForm = reduxForm({
-  form: 'addChannel'
+  form: 'addChannel',
+  initialValues: {private: false}
 })(AddChannelForm);
 
 AddChannelForm = connect(

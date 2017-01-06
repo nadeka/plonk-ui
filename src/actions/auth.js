@@ -132,3 +132,33 @@ export function registerError() {
     type: types.REGISTER_ERROR
   }
 }
+
+export function loggingOut() {
+  return {
+    type: types.LOGGING_OUT
+  }
+}
+
+export function logOut() {
+  return function(dispatch) {
+    dispatch(loggingOut());
+
+    let url = API_BASE_URL + `/logout`;
+
+    return fetch(url, {
+      method: 'POST',
+      credentials: 'include'
+    }).then(function(res) {
+      if (res.ok) {
+        dispatch(logoutSuccess());
+      }
+    })
+      .catch(err => console.log(err));
+  }
+}
+
+export function logoutSuccess() {
+  return {
+    type: types.LOGOUT_SUCCESS
+  }
+}

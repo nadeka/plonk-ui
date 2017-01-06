@@ -155,7 +155,7 @@ export function addingChannel() {
   }
 }
 
-export function addChannel(name) {
+export function addChannel(values) {
   return function(dispatch) {
     dispatch(addingChannel());
 
@@ -166,8 +166,8 @@ export function addChannel(name) {
     };
 
     let payload = {
-      name: name,
-      private: false
+      name: values.name,
+      private: values.private
     };
 
     return fetch(url, {

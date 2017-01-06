@@ -1,5 +1,5 @@
 import React from 'react';
-import AddChannelForm from './AddChannelForm';
+import AddChannelDialog from './AddChannelDialog';
 import ScrollArea from 'react-scrollbar';
 import { ListItem, List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -9,6 +9,10 @@ const unreadMessagesIcon = {
   width: 10,
   height: 10,
   padding: 8
+};
+
+const subheaderStyle = {
+  fontSize: 18
 };
 
 class ChannelList extends React.Component {
@@ -22,7 +26,9 @@ class ChannelList extends React.Component {
     // TODO refactor
     return(
       <div className="channel-list">
-        <Subheader>Channels</Subheader>
+        <Subheader style={subheaderStyle}>Channels</Subheader>
+        <AddChannelDialog />
+        <br/>
         <ScrollArea
           speed={0.8}
           className="channel-list-scroll-area"
@@ -51,7 +57,6 @@ class ChannelList extends React.Component {
             }
           </List>
         </ScrollArea>
-        <AddChannelForm />
       </div>
     );
   }

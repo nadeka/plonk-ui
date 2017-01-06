@@ -14,10 +14,10 @@ class RegisterForm extends React.Component {
         <h1>Register</h1>
         <form onSubmit={this.props.handleSubmit}>
           <div>
-            <Field name="name" label="Name" component={renderTextField} />
+            <Field name="name" label="Name" type="text" component={renderTextField} />
           </div>
           <div>
-            <Field name="password" label="Password" component={renderTextField} />
+            <Field name="password" label="Password" type="password" component={renderTextField} />
           </div>
           <FlatButton label="Register" primary={true} type="submit"></FlatButton>
         </form>

@@ -5,6 +5,10 @@ import { ListItem, List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import moment from 'moment';
 
+const subheaderStyle = {
+  fontSize: 18
+};
+
 class MessageList extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +23,7 @@ class MessageList extends React.Component {
 
     return(
       <div className="message-list">
-        <Subheader>Messages</Subheader>
+        <Subheader style={subheaderStyle}>Messages</Subheader>
         <ScrollArea
           speed={0.8}
           className="message-list-scroll-area"

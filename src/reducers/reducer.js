@@ -124,6 +124,14 @@ function reducer(state = initialState, action) {
         isLoading: false
       });
 
+    case types.LOGGING_OUT:
+      return Object.assign({}, state, {
+        isLoading: true
+      });
+
+    case types.LOGOUT_SUCCESS:
+      return _.merge({}, state, { isLoading: false, userLoggedIn: null });
+
     default:
       return state;
   }
