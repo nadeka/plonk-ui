@@ -59,7 +59,9 @@ export function connectionSuccess() {
 
     client.subscribe('/new-channel', function (newChannel, flags) {
       dispatch(addChannelSuccess(normalize(newChannel, channel)));
-    }, function (err) { });
+    }, function (err) {
+      console.log(err);
+    });
 
     client.subscribe('/new-message', function (newMessage, flags) {
       let entities = normalize(newMessage, message);
@@ -70,16 +72,14 @@ export function connectionSuccess() {
       entities.entities.channelsWithNewMessages[newMessage.channelid] = newMessage.channelid;
 
       dispatch(addMessageSuccess(entities));
-    }, function (err) { });
+    }, function (err) {
+      console.log(err);
+    });
 
     client.subscribe('/user-joined', function (updatedChannel, flags) {
       dispatch(joinSuccess(normalize(updatedChannel, channel)));
-    }, function (err) { });
+    }, function (err) {
+      console.log(err);
+    });
   };
 }
-
-// export function connectionError() {
-//   return {
-//     type: types.CONNECTION_ERROR
-//   }
-// }

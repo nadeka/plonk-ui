@@ -1,92 +1,155 @@
-// TODO make everything responsive
 body {
   font: 12px 'Roboto', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
+  background-color: #000000;
+  color: #ffffff;
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
   font-smoothing: antialiased;
   font-weight: 300;
-  margin: 20px;
-}
-
-h2 {
-  margin-bottom: 1.5em;
+  margin: 3em;
 }
 
 .form-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-flow: column;
+  flex-flow: column;
+  align-items: center;
+  margin: -2em 0;
 }
 
-.login-form {
-  flex: 1 1 auto;
+.form-container > * {
+  margin: 2em 0;
   text-align: center;
-  margin: 2em;
-}
-
-.register-form {
-  flex: 1 1 auto;
-  text-align: center;
-  margin: 2em;
-}
-
-.message-header {
-  font-size: 11px;
 }
 
 .main-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  margin: -10px;
 }
 
-.message-list-content, .channel-list-content, .user-list-content {
-  padding-right: 8px;
-}
-
-.channel-list {
-  position: fixed;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  height: 500px;
-  max-width: 200px;
+.main-container > * {
+  flex: 1 60%;
+  margin: 10px;
   word-wrap: break-word;
 }
 
-.channel-page, .join-button {
-  margin-left: 400px;
-  display: -webkit-flex;
-  display: flex;
+.message-title {
+  font-size: 16px;
+}
+
+.message-date {
+  font-size: 12px;
+  color: #9E9E9E;
+}
+
+.message-content {
+  font-size: 14px;
+  color: #9E9E9E;
 }
 
 .message-list {
-  position: fixed;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  height: 600px;
-  width: 600px;
-  word-wrap: break-word;
+  -webkit-flex-flow: column;
+  flex-flow: column;
 }
 
-.user-list {
-  margin-left: 700px;
-  word-wrap: break-word;
-  height: 600px;
-  position: fixed;
+.channel-list {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: column;
+  flex-flow: column;
 }
 
-// TODO position text fields to bottom of screen without problems
+.channel-list-header {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  padding-bottom: 10px;
+}
+
+.channel-list-title {
+  margin-right: 0.7em;
+}
+
 .add-message-form {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: flex-end;
+  margin: 0 -10px;
   position: fixed;
-  bottom: 0;
-  background: white;
+  bottom: 2em;
+  justify-content: center;
 }
 
-ul {
-  list-style-type: none;
-  text-align: left;
-  padding: 0;
+.add-message-form > * {
+  margin: 0 10px;
+}
+
+.channel-list-title, .message-list-title, .user-list-title, .register-title, .login-title {
+  font-size: 20px;
+}
+
+.channel-page {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row;
+  flex-flow: row;
+}
+
+.message-list-channel-name {
+  font-size: 16px;
+  margin-left: 10px;
+  color: #9E9E9E;
+}
+
+.channel-page > * {
+  padding: 10px;
+  flex: 1 60%;
+}
+
+@media (min-height: 600px) {
+  .message-list { height: 450px; }
+  .channel-list { height: 450px; }
+  .user-list { height: 450px; }
+}
+
+@media (min-width: 900px) {
+  .message-list { width: 500px; }
+  .channel-list { width: 100px; }
+  .user-list { width: 10px; }
+}
+
+@media all and (min-width: 600px) {
+  .channel-list { flex: 1 auto; }
+  .user-list { flex: 1 auto; }
+}
+
+@media all and (min-width: 800px) {
+  .message-list    { flex: 3 0px; }
 }

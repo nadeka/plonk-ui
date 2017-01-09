@@ -1,6 +1,7 @@
 import * as types from '../constants/actionTypes';
 import { normalize } from 'normalizr';
 import { user } from './schemas';
+import { openConnection, closeConnection } from './websocket';
 
 // Some browsers do not natively support fetch API
 import fetch from 'isomorphic-fetch';
@@ -27,9 +28,11 @@ export function verifyToken() {
         res.json()
           .then(function(json) {
             dispatch(authenticateSuccess(json.id));
+            dispatch(openConnection());
           })
       } else {
         dispatch(authenticateError());
+        dispatch(closeConnection());
       }
     })
       .catch(err => console.log(err));
@@ -62,9 +65,11 @@ export function authenticateUser(payload) {
         res.json()
           .then(function(json) {
             dispatch(authenticateSuccess(json.id));
+            dispatch(openConnection());
           })
       } else {
         dispatch(authenticateError());
+        dispatch(closeConnection());
       }
     })
       .catch(err => console.log(err));
@@ -110,9 +115,11 @@ export function registerUser(payload) {
         res.json()
           .then(function(json) {
             dispatch(registerSuccess(normalize(json, user), json.id));
+            dispatch(openConnection());
           })
       } else {
         dispatch(registerError());
+        dispatch(closeConnection());
       }
     })
       .catch(err => console.log(err));
@@ -149,9 +156,8 @@ export function logOut() {
       method: 'POST',
       credentials: 'include'
     }).then(function(res) {
-      if (res.ok) {
-        dispatch(logoutSuccess());
-      }
+      dispatch(logoutSuccess());
+      dispatch(closeConnection());
     })
       .catch(err => console.log(err));
   }

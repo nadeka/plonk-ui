@@ -10,7 +10,7 @@ class LogoutForm extends React.Component {
     return (
       <div className="logout-form">
         <form onSubmit={this.props.handleSubmit}>
-          <FlatButton label="Log out" type="submit" style={{color: 'white'}} />
+          <FlatButton label="Log out" type="submit" style={{backgroundColor: '#FFFFFF', color: '#000000'}} />
         </form>
       </div>
     );

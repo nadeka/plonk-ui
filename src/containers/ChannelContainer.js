@@ -5,10 +5,6 @@ import UserList from '../components/UserList';
 import { joinChannel } from '../actions/channels';
 import FlatButton from 'material-ui/FlatButton';
 
-const joinButtonStyle = {
-  color: '#33D033'
-};
-
 export class ChannelContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -16,36 +12,36 @@ export class ChannelContainer extends React.Component {
 
   render() {
     const {
-      isLoading,
       selectedChannel,
       joinChannel,
       userLoggedIn,
-      messages,
       channels
     } = this.props;
 
-    if (isLoading || !selectedChannel) {
+    if (!selectedChannel) {
       return(
-        <div></div>
+        <p>Welcome!</p>
       );
     }
 
-    if (!this.userBelongsToChannel(userLoggedIn, channels[selectedChannel])) {
+    if (this.userBelongsToChannel(userLoggedIn, channels[selectedChannel])) {
       return(
-        <div className="join-button">
-          <FlatButton
-            labelStyle={joinButtonStyle}
-            label={"Join " + channels[selectedChannel].name}
-            onClick={() => joinChannel(selectedChannel)}>
-          </FlatButton>
+        <div className="channel-page">
+          <MessageList {...this.props} />
+          <UserList {...this.props} />
         </div>
       );
     }
 
     return(
       <div className="channel-page">
-        <MessageList {...this.props} />
-        <UserList {...this.props} />
+        <div className="join-button">
+          <FlatButton
+            style={{backgroundColor: '#FFFFFF', color: '#000000'}}
+            label={"Join " + channels[selectedChannel].name}
+            onClick={() => joinChannel(selectedChannel)}>
+          </FlatButton>
+        </div>
       </div>
     );
   }
@@ -61,8 +57,7 @@ const mapStateToProps = (state) => {
     selectedChannel: state.reducer.selectedChannel,
     userLoggedIn: state.reducer.userLoggedIn,
     channels: state.reducer.channels,
-    users: state.reducer.users,
-    isLoading: state.reducer.isLoading
+    users: state.reducer.users
   }
 };
 

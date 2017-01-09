@@ -2,17 +2,12 @@ import React from 'react';
 import AddChannelDialog from './AddChannelDialog';
 import ScrollArea from 'react-scrollbar';
 import { ListItem, List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import NotificationsIcon from 'material-ui/svg-icons/av/fiber-manual-record';
 
 const unreadMessagesIcon = {
   width: 10,
   height: 10,
   padding: 8
-};
-
-const subheaderStyle = {
-  fontSize: 18
 };
 
 class ChannelList extends React.Component {
@@ -26,15 +21,17 @@ class ChannelList extends React.Component {
     // TODO refactor
     return(
       <div className="channel-list">
-        <Subheader style={subheaderStyle}>Channels</Subheader>
-        <AddChannelDialog />
-        <br/>
+        <div className="channel-list-header">
+          <p className="channel-list-title">Channels</p>
+          <AddChannelDialog />
+        </div>
         <ScrollArea
           speed={0.8}
           className="channel-list-scroll-area"
           contentClassName="channel-list-content"
           horizontal={false}
           smoothScrolling={true}
+          verticalScrollbarStyle={{background: 'white'}}
         >
           <List>
             {
@@ -47,10 +44,12 @@ class ChannelList extends React.Component {
                     key={channel.id}
                     onClick={() => selectChannel(channel.id)}
                     primaryText={channel.name}
+                    style={{color: 'white'}}
                     rightIcon={<NotificationsIcon color={'#33D0D0'} style={unreadMessagesIcon} />}
                   />
                 : <ListItem
                     key={channel.id}
+                    style={{color: 'white'}}
                     onClick={() => selectChannel(channel.id)}
                     primaryText={channel.name}
                   />)

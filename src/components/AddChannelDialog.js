@@ -1,8 +1,7 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
-import { connect } from 'react-redux';
-import { Field, reduxForm, reset } from 'redux-form';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddChannelForm from './AddChannelForm';
 
 export default class AddChannelDialog extends React.Component {
@@ -25,8 +24,14 @@ export default class AddChannelDialog extends React.Component {
 
   render() {
     return (
-      <div>
-        <RaisedButton label='Add channel' onTouchTap={this.handleOpen} />
+      <div className="add-channel-dialog">
+        <FloatingActionButton
+          mini={true}
+          backgroundColor="#FFFFFF"
+          iconStyle={{width: '25px', height: '25px'}}
+          onTouchTap={this.handleOpen}>
+          <ContentAdd style={{width: '17px', height: '25px'}}/>
+        </FloatingActionButton>
         <Dialog
           title='Add new channel'
           modal={false}

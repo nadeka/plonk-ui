@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { registerUser } from '../actions/auth';
 import FlatButton from 'material-ui/FlatButton';
-import renderTextField from './TextField';
+import { TextField } from 'redux-form-material-ui';
 
 class RegisterForm extends React.Component {
 
@@ -11,15 +11,18 @@ class RegisterForm extends React.Component {
   render() {
     return (
       <div className="register-form">
-        <h1>Register</h1>
+        <p className="register-title">Register</p>
         <form onSubmit={this.props.handleSubmit}>
           <div>
-            <Field name="name" label="Name" type="text" component={renderTextField} />
+            <Field name="name" type="text" hintText="Name" component={TextField} />
           </div>
           <div>
-            <Field name="password" label="Password" type="password" component={renderTextField} />
+            <Field name="password" label="Password" type="password" hintText="Password" component={TextField} />
           </div>
-          <FlatButton label="Register" primary={true} type="submit"></FlatButton>
+          <FlatButton
+            label="Register"
+            style={{backgroundColor: '#FFFFFF', color: '#000000'}}
+            type="submit" />
         </form>
       </div>
     );

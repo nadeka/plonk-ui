@@ -2,12 +2,7 @@ import React from 'react';
 import AddMessageForm from './AddMessageForm';
 import ScrollArea from 'react-scrollbar';
 import { ListItem, List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import moment from 'moment';
-
-const subheaderStyle = {
-  fontSize: 18
-};
 
 class MessageList extends React.Component {
   constructor(props) {
@@ -18,32 +13,49 @@ class MessageList extends React.Component {
     const {
       selectedChannel,
       messages,
+      channels,
       users
     } = this.props;
 
     return(
       <div className="message-list">
-        <Subheader style={subheaderStyle}>Messages</Subheader>
+        <p className="message-list-title">Messages
+          <span className="message-list-channel-name"> {channels[selectedChannel].name}</span></p>
         <ScrollArea
           speed={0.8}
           className="message-list-scroll-area"
           contentClassName="message-list-content"
           horizontal={false}
           smoothScrolling={true}
+          verticalScrollbarStyle={{background: 'white'}}
         >
-          <List>
-            {
-              Object.values(messages)
-                .filter(message => message.channelid === selectedChannel)
-                .map(message =>
+          {!Object.values(messages) || Object.values(messages).length < 1 ?
+            <p>No messages.</p>
+            :
+            <List>
+              {
+                Object.values(messages)
+                  .filter(message => message.channelid === selectedChannel)
+                  .map(message =>
                   <ListItem
                     key={message.id}
-                    primaryText={users[message.userid].name + ' ' + moment(message.createdat).format('DD.MM. h:mm a')}
-                    secondaryText={message.content}
+                    primaryText={
+                      <div className="message">
+                        <div className="message-title">
+                          <p>{users[message.userid].name}
+                          <span className="message-date"> {moment(message.createdat).format('DD.MM. h:mm a')}</span>
+                          </p>
+                        </div>
+                        <div className="message-content">
+                          {message.content}
+                        </div>
+                      </div>
+                    }
                   />
                 )
-            }
-          </List>
+              }
+            </List>
+          }
         </ScrollArea>
         <AddMessageForm
           selectedChannel={selectedChannel}

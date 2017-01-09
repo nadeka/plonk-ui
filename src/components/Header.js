@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import LogoutForm from './LogoutForm';
 
 const toolBarStyle = {
@@ -17,6 +17,7 @@ export default class Header extends React.Component {
       <Toolbar style={toolBarStyle}>
         <ToolbarGroup firstChild={true}>
         </ToolbarGroup>
+        <ToolbarTitle text="PLONK"></ToolbarTitle>
         <ToolbarGroup>
           <LogoutForm />
         </ToolbarGroup>
