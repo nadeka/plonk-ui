@@ -3,6 +3,7 @@ import AddMessageForm from './AddMessageForm';
 import ScrollArea from 'react-scrollbar';
 import { ListItem, List } from 'material-ui/List';
 import moment from 'moment';
+import { emojify } from 'react-emojione2';
 
 class MessageList extends React.Component {
   constructor(props) {
@@ -17,6 +18,9 @@ class MessageList extends React.Component {
       users
     } = this.props;
 
+    let messagesOfChannel = Object.values(messages)
+      .filter(message => message.channelid === selectedChannel);
+
     return(
       <div className="message-list">
         <p className="message-list-title">Messages
@@ -29,13 +33,12 @@ class MessageList extends React.Component {
           smoothScrolling={true}
           verticalScrollbarStyle={{background: 'white'}}
         >
-          {!Object.values(messages) || Object.values(messages).length < 1 ?
+          {!messagesOfChannel || messagesOfChannel.length < 1 ?
             <p>No messages.</p>
             :
             <List>
               {
-                Object.values(messages)
-                  .filter(message => message.channelid === selectedChannel)
+                messagesOfChannel
                   .map(message =>
                   <ListItem
                     key={message.id}
@@ -47,7 +50,7 @@ class MessageList extends React.Component {
                           </p>
                         </div>
                         <div className="message-content">
-                          {message.content}
+                          {emojify(message.content)}
                         </div>
                       </div>
                     }

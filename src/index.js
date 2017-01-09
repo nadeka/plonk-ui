@@ -7,7 +7,9 @@ import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore';
 require('./favicon.ico');
+require('./assets/emojione.sprites.png');
 import './styles/styles.scss';
+import './styles/picker.scss';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';

@@ -28,7 +28,6 @@ function reducer(state = initialState, action) {
       });
 
     case types.JOIN_SUCCESS:
-      console.log(_.merge({}, state, action.entities));
       return _.merge({}, state, action.entities);
 
     case types.ADD_MESSAGE_SUCCESS:
