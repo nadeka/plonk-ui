@@ -37,7 +37,7 @@ export class ChannelContainer extends React.Component {
       <div className="channel-page">
         <div className="join-button">
           <FlatButton
-            style={{backgroundColor: '#FFFFFF', color: '#000000'}}
+            style={{backgroundColor: '#fff', color: '#000'}}
             label={"Join " + channels[selectedChannel].name}
             onClick={() => joinChannel(selectedChannel)}>
           </FlatButton>
@@ -53,7 +53,11 @@ export class ChannelContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    messages: state.reducer.messages,
+    // Find messages of selected channel and attach sender name to each message
+    messages: Object.values(state.reducer.messages)
+      .filter(message => message.channelid === state.reducer.selectedChannel)
+      .map(message => Object.assign({}, message, {sender: state.reducer.users[message.userid].name})),
+
     selectedChannel: state.reducer.selectedChannel,
     userLoggedIn: state.reducer.userLoggedIn,
     channels: state.reducer.channels,

@@ -177,10 +177,10 @@ export function addChannel(values) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        // res.json()
-        //   .then(function(json) {
-        //     dispatch(addChannelSuccess(normalize(json, channel)));
-        //   })
+        res.json()
+          .then(function(json) {
+            dispatch(joinChannel(json.id));
+          })
       } else {
         dispatch(addChannelError());
       }

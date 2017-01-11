@@ -18,7 +18,6 @@ class UserList extends React.Component {
       <div className="user-list">
         <p className="user-list-title">Members</p>
         <Scrollbars
-          hideTracksWhenNotNeeded={true}
           renderThumbVertical={({ style, ...props }) =>
             <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
           }>

@@ -91,6 +91,11 @@ body {
   margin-right: 0.7em;
 }
 
+.channel-list-joined-subheader, .channel-list-not-joined-subheader {
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .add-message-form {
   display: -webkit-box;
   display: -moz-box;
