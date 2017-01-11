@@ -11,20 +11,13 @@ export class ChannelContainer extends React.Component {
   }
 
   render() {
-    const {
-      selectedChannel,
-      joinChannel,
-      userLoggedIn,
-      channels
-    } = this.props;
-
-    if (!selectedChannel) {
+    if (!this.props.selectedChannel) {
       return(
         <p>Welcome!</p>
       );
     }
 
-    if (this.userBelongsToChannel(userLoggedIn, channels[selectedChannel])) {
+    if (this.props.selectedChannel.users.find(user => user === this.props.userLoggedIn)) {
       return(
         <div className="channel-page">
           <MessageList {...this.props} />
@@ -38,16 +31,12 @@ export class ChannelContainer extends React.Component {
         <div className="join-button">
           <FlatButton
             style={{backgroundColor: '#fff', color: '#000'}}
-            label={"Join " + channels[selectedChannel].name}
-            onClick={() => joinChannel(selectedChannel)}>
+            label={"Join " + this.props.selectedChannel.name}
+            onClick={() => this.props.joinChannel(this.props.selectedChannel.id)}>
           </FlatButton>
         </div>
       </div>
     );
-  }
-
-  userBelongsToChannel(userLoggedIn, channel) {
-    return channel && channel.users && channel.users.find(id => id === userLoggedIn);
   }
 }
 
@@ -58,10 +47,14 @@ const mapStateToProps = (state) => {
       .filter(message => message.channelid === state.reducer.selectedChannel)
       .map(message => Object.assign({}, message, {sender: state.reducer.users[message.userid].name})),
 
-    selectedChannel: state.reducer.selectedChannel,
+    selectedChannel: state.reducer.selectedChannel ? state.reducer.channels[state.reducer.selectedChannel] : null,
     userLoggedIn: state.reducer.userLoggedIn,
     channels: state.reducer.channels,
-    users: state.reducer.users
+
+    // Find users of selected channel
+    users:  Object.values(state.reducer.users)
+      .filter(user => state.reducer.channels[state.reducer.selectedChannel] &&
+      state.reducer.channels[state.reducer.selectedChannel].users.find(u => u === user.id))
   }
 };
 

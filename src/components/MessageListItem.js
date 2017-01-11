@@ -3,7 +3,7 @@ import { ListItem } from 'material-ui/List';
 import moment from 'moment';
 import { emojify } from 'react-emojione2';
 
-class Message extends React.Component {
+class MessageListItem extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -11,7 +11,6 @@ class Message extends React.Component {
   render() {
     return (
       <ListItem
-        key={this.props.id}
         primaryText={
           <div className="message">
             <div className="message-title">
@@ -29,4 +28,4 @@ class Message extends React.Component {
   }
 }
 
-export default Message;
+export default MessageListItem;

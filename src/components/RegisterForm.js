@@ -12,20 +12,45 @@ class RegisterForm extends React.Component {
     return (
       <div className="register-form">
         <p className="register-title">Register</p>
-        <form onSubmit={this.props.handleSubmit}>
-          <div>
-            <Field name="name" type="text" hintText="Name" component={TextField} />
-          </div>
-          <div>
-            <Field name="password" label="Password" type="password" hintText="Password" component={TextField} />
-          </div>
-          <FlatButton
-            label="Register"
-            style={{backgroundColor: '#FFFFFF', color: '#000000'}}
-            type="submit" />
-        </form>
+        {this.renderForm()}
       </div>
     );
+  }
+
+  renderForm() {
+    return (
+      <form onSubmit={this.props.handleSubmit}>
+        {this.renderNameTextField()}
+        {this.renderPasswordField()}
+        {this.renderSubmitButton()}
+      </form>
+    )
+  }
+
+  renderNameTextField() {
+    return (
+      <div>
+        <Field name="name" label="Name" type="text" hintText="Name" component={TextField} />
+      </div>
+    )
+  }
+
+  renderPasswordField() {
+    return (
+      <div>
+        <Field name="password" label="Password" type="password" hintText="Password" component={TextField} />
+      </div>
+    )
+  }
+
+  renderSubmitButton() {
+    return (
+      <FlatButton
+        label="Register"
+        type="submit"
+        style={{backgroundColor: '#fff', color: '#000'}}
+      />
+    )
   }
 }
 

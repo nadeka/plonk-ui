@@ -3,7 +3,7 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import LogoutForm from './LogoutForm';
 
 const toolBarStyle = {
-  backgroundColor: 'black'
+  backgroundColor: '#000'
 };
 
 export default class Header extends React.Component {

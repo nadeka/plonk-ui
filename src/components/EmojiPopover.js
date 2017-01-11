@@ -36,22 +36,41 @@ export default class EmojiPopover extends React.Component {
   render() {
     return (
       <div>
-        <IconButton onTouchTap={this.handleTouchTap}>
-          <Face color='#fff' hoverColor="#9E9E9E" />
-        </IconButton>
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-        >
-            <EmojiPicker
-              search={true}
-              emojione={{ imageType: 'png', sprites: true }}
-              onChange={this.props.onChange} />
-        </Popover>
+        {this.renderOpenEmojiPickerButton()}
+        {this.renderPopover()}
       </div>
     );
+  }
+
+  renderOpenEmojiPickerButton() {
+    return (
+      <IconButton onTouchTap={this.handleTouchTap}>
+        <Face color='#fff' hoverColor="#9E9E9E" />
+      </IconButton>
+    )
+  }
+
+  renderPopover() {
+    return (
+      <Popover
+        open={this.state.open}
+        anchorEl={this.state.anchorEl}
+        anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        onRequestClose={this.handleRequestClose}
+      >
+        {this.renderEmojiPicker()}
+      </Popover>
+    )
+  }
+
+  renderEmojiPicker() {
+    return (
+      <EmojiPicker
+        search={true}
+        emojione={{ imageType: 'png', sprites: true}}
+        onChange={this.props.onChange}
+      />
+    )
   }
 }

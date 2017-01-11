@@ -12,20 +12,45 @@ class LoginForm extends React.Component {
     return (
       <div className="login-form">
         <p className="login-title">Log in</p>
-        <form onSubmit={this.props.handleSubmit}>
-          <div>
-            <Field name="name" label="Name" type="text" hintText="Name" component={TextField} />
-          </div>
-          <div>
-            <Field name="password" label="Password" type="password" hintText="Password" component={TextField} />
-          </div>
-          <FlatButton
-            label="Log in"
-            type="submit"
-            style={{backgroundColor: '#FFFFFF', color: '#000000'}} />
-        </form>
+        {this.renderForm()}
       </div>
     );
+  }
+
+  renderForm() {
+    return (
+      <form onSubmit={this.props.handleSubmit}>
+        {this.renderNameTextField()}
+        {this.renderPasswordField()}
+        {this.renderSubmitButton()}
+      </form>
+    )
+  }
+
+  renderNameTextField() {
+    return (
+      <div>
+        <Field name="name" label="Name" type="text" hintText="Name" component={TextField} />
+      </div>
+    )
+  }
+
+  renderPasswordField() {
+    return (
+      <div>
+        <Field name="password" label="Password" type="password" hintText="Password" component={TextField} />
+      </div>
+    )
+  }
+
+  renderSubmitButton() {
+    return (
+      <FlatButton
+        label="Log in"
+        type="submit"
+        style={{backgroundColor: '#fff', color: '#000'}}
+      />
+    )
   }
 }
 

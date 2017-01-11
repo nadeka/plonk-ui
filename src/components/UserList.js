@@ -1,6 +1,7 @@
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { ListItem, List } from 'material-ui/List';
+import { List } from 'material-ui/List';
+import UserListItem from './UserListItem';
 
 class UserList extends React.Component {
   constructor(props) {
@@ -8,34 +9,40 @@ class UserList extends React.Component {
   }
 
   render() {
-    const {
-      selectedChannel,
-      channels,
-      users
-    } = this.props;
-
     return(
       <div className="user-list">
-        <p className="user-list-title">Members</p>
-        <Scrollbars
-          renderThumbVertical={({ style, ...props }) =>
-            <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
-          }>
-          <List>
-            {
-              Object.values(users)
-                .filter(user => channels[selectedChannel].users.find(u => u === user.id))
-                .map(user =>
-                  <ListItem
-                    key={user.id}
-                    primaryText={user.name}
-                  />
-                )
-            }
-          </List>
-        </Scrollbars>
+        {this.renderUserListHeader()}
+        {this.renderScrollArea()}
       </div>
     );
+  }
+
+  renderUserListHeader() {
+    return (
+      <p className="user-list-title">
+        Members ({this.props.selectedChannel.users.length})
+      </p>
+    )
+  }
+
+  renderScrollArea() {
+    return (
+      <Scrollbars
+        renderThumbVertical={({ style, ...props }) =>
+          <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
+        }
+      >
+        {this.renderUserList()}
+      </Scrollbars>
+    )
+  }
+
+  renderUserList() {
+    return (
+      <List>
+        {this.props.users.map(user => <UserListItem key={user.id} {...user} />)}
+      </List>
+    )
   }
 }
 

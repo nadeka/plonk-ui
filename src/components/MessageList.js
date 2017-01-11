@@ -2,7 +2,7 @@ import React from 'react';
 import AddMessageForm from './AddMessageForm';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { List } from 'material-ui/List';
-import Message from './Message';
+import MessageListItem from './MessageListItem';
 
 class MessageList extends React.Component {
   constructor(props) {
@@ -18,31 +18,52 @@ class MessageList extends React.Component {
     this.scrollbars.scrollToBottom();
   }
 
-  renderScrollArea(messages) {
+  render() {
+    return(
+      <div className="message-list">
+        {this.renderMessageListHeader()}
+        {this.renderScrollArea()}
+        {this.renderAddMessageForm()}
+      </div>
+    );
+  }
+
+  renderMessageListHeader() {
+    return (
+      <p className="message-list-title">
+        Messages ({this.props.messages.length})
+        <span className="message-list-channel-name">
+          {'#' + this.props.selectedChannel.name}
+          </span>
+      </p>
+    )
+  }
+
+  renderScrollArea() {
     return (
       <Scrollbars
         ref={(scrollbars) => { this.scrollbars = scrollbars; }}
         renderThumbVertical={({ style, ...props }) =>
           <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
         }>
-        {this.renderScrollAreaContent(messages)}
+        {this.renderScrollAreaContent()}
       </Scrollbars>
     )
   }
 
-  renderScrollAreaContent(messages) {
+  renderScrollAreaContent() {
     return (
-      !messages || messages.length < 1 ?
+      !this.props.messages || this.props.messages.length < 1 ?
         <p>Start the conversation!</p>
         :
-        this.renderMessageList(messages)
+        this.renderMessageList(this.props.messages)
     )
   }
 
-  renderMessageList(messages) {
+  renderMessageList() {
     return (
       <List>
-        { messages.map(message => <Message {...message} />) }
+        { this.props.messages.map(message => <MessageListItem key={message.id} {...message} />) }
       </List>
     )
   }
@@ -53,23 +74,6 @@ class MessageList extends React.Component {
         selectedChannel={this.props.selectedChannel}
       />
     )
-  }
-
-  render() {
-    const {
-      selectedChannel,
-      messages,
-      channels
-    } = this.props;
-
-    return(
-      <div className="message-list">
-        <p className="message-list-title">Messages
-          <span className="message-list-channel-name"> {'#' + channels[selectedChannel].name}</span></p>
-        {this.renderScrollArea(messages)}
-        {this.renderAddMessageForm()}
-      </div>
-    );
   }
 }
 

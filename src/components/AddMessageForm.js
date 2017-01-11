@@ -9,13 +9,57 @@ import EmojiPopover from './EmojiPopover';
 class AddMessageForm extends React.Component {
   render() {
     return (
-      <form className="add-message-form" onSubmit={this.props.handleSubmit}>
-        <EmojiPopover onChange={(data) =>
-          this.refs.content.getRenderedComponent().props.input.onChange((this.refs.content.value || '') + data.shortname)} />
-        <Field name="content" label="Message" hintText="Message" ref='content' withRef={true} component={TextField} />
-        <FlatButton style={{backgroundColor: '#FFFFFF', color: '#000000'}} label="Send" type="submit" />
-      </form>
+      this.renderForm()
     );
+  }
+
+  renderForm() {
+    return (
+      <form
+        className="add-message-form"
+        onSubmit={this.props.handleSubmit}>
+
+          {this.renderEmojiPicker()}
+          {this.renderContentTextField()}
+          {this.renderSubmitButton()}
+      </form>
+    )
+  }
+
+  renderEmojiPicker() {
+    return (
+      <EmojiPopover
+        onChange={(emoji) => this.addEmojiToInput(emoji)}
+      />
+    )
+  }
+
+  addEmojiToInput(emoji) {
+    this.refs.content.getRenderedComponent()
+      .props.input.onChange((this.refs.content.value || '') + emoji.shortname)
+  }
+
+  renderContentTextField() {
+    return (
+      <Field
+        name="content"
+        label="Message"
+        hintText="Message"
+        ref='content'
+        withRef={true}
+        component={TextField}
+      />
+    )
+  }
+
+  renderSubmitButton() {
+    return (
+      <FlatButton
+        style={{backgroundColor: '#fff', color: '#000'}}
+        label="Send"
+        type="submit"
+      />
+    )
   }
 }
 
@@ -26,7 +70,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmit: (values) => {
-      dispatch(addMessage(values.content, ownProps.selectedChannel));
+      dispatch(addMessage(values.content, ownProps.selectedChannel.id));
       dispatch(reset('addMessage'));
     }
   }

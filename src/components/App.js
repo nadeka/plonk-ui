@@ -27,11 +27,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { userLoggedIn } = this.props;
-
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-        {userLoggedIn ?
+        {this.props.userLoggedIn ?
           <div>
             <div className="header">
               <Header />
@@ -41,7 +39,7 @@ class App extends React.Component {
               <ChannelContainer />
             </div>
           </div>
-        :
+          :
           <div className="form-container">
             <LoginForm />
             <RegisterForm />

@@ -8,32 +8,65 @@ import { Checkbox, TextField } from 'redux-form-material-ui';
 class AddChannelForm extends React.Component {
   render() {
     return (
+      this.renderForm()
+    );
+  }
+
+  renderForm() {
+    return (
       <form className="add-channel-form" onSubmit={this.props.handleSubmit}>
-        <div>
-          <Field name="name" label="Name" hintText="Name" component={TextField} />
-        </div>
-        <br/>
-        <div>
-          <Field name="private" label="Private" component={Checkbox} />
-        </div>
-        <br/>
+        {this.renderNameTextField()}
+        {this.renderPrivateCheckbox()}
         <div style={{ textAlign: 'left', padding: 8, margin: '24px -24px -24px -24px' }}>
-          <FlatButton
-            label="Create"
-            style={{backgroundColor: '#FFFFFF', color: '#000000'}}
-            type="submit"
-            keyboardFocused={true}
-            onTouchTap={this.props.handleClose}
-          />
-          <FlatButton
-            label="Cancel"
-            secondary={true}
-            style={{color: '#FFFFFF'}}
-            onTouchTap={this.props.handleClose}
-          />
+          {this.renderSubmitButton()}
+          {this.renderCancelButton()}
         </div>
       </form>
-    );
+    )
+  }
+
+  renderNameTextField() {
+    return (
+      <Field
+        name="name"
+        label="Name"
+        hintText="Name"
+        component={TextField}
+      />
+    )
+  }
+
+  renderPrivateCheckbox() {
+    return (
+      <Field
+        name="private"
+        label="Private"
+        component={Checkbox}
+      />
+    )
+  }
+
+  renderSubmitButton() {
+    return (
+      <FlatButton
+        label="Create"
+        style={{backgroundColor: '#fff', color: '#000'}}
+        type="submit"
+        keyboardFocused={true}
+        onTouchTap={this.props.handleClose}
+      />
+    )
+  }
+
+  renderCancelButton() {
+    return (
+      <FlatButton
+        label="Cancel"
+        secondary={true}
+        style={{color: '#fff'}}
+        onTouchTap={this.props.handleClose}
+      />
+    )
   }
 }
 
