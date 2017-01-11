@@ -1,6 +1,6 @@
 import React from 'react';
 import AddMessageForm from './AddMessageForm';
-import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { ListItem, List } from 'material-ui/List';
 import moment from 'moment';
 import { emojify } from 'react-emojione2';
@@ -8,6 +8,15 @@ import { emojify } from 'react-emojione2';
 class MessageList extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.scrollbars.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    // TODO only scroll to bottom when scroll position is already at bottom
+    this.scrollbars.scrollToBottom();
   }
 
   render() {
@@ -25,14 +34,12 @@ class MessageList extends React.Component {
       <div className="message-list">
         <p className="message-list-title">Messages
           <span className="message-list-channel-name"> {channels[selectedChannel].name}</span></p>
-        <ScrollArea
-          speed={0.8}
-          className="message-list-scroll-area"
-          contentClassName="message-list-content"
-          horizontal={false}
-          smoothScrolling={true}
-          verticalScrollbarStyle={{background: 'white'}}
-        >
+        <Scrollbars
+          ref={(scrollbars) => { this.scrollbars = scrollbars; }}
+          hideTracksWhenNotNeeded={true}
+          renderThumbVertical={({ style, ...props }) =>
+            <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
+              }>
           {!messagesOfChannel || messagesOfChannel.length < 1 ?
             <p>No messages.</p>
             :
@@ -59,7 +66,7 @@ class MessageList extends React.Component {
               }
             </List>
           }
-        </ScrollArea>
+        </Scrollbars>
         <AddMessageForm
           selectedChannel={selectedChannel}
         />

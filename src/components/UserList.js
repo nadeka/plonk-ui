@@ -1,5 +1,5 @@
 import React from 'react';
-import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { ListItem, List } from 'material-ui/List';
 
 class UserList extends React.Component {
@@ -17,13 +17,11 @@ class UserList extends React.Component {
     return(
       <div className="user-list">
         <p className="user-list-title">Members</p>
-        <ScrollArea
-          speed={0.8}
-          className="user-list-scroll-area"
-          contentClassName="user-list-content"
-          horizontal={false}
-          smoothScrolling={true}
-        >
+        <Scrollbars
+          hideTracksWhenNotNeeded={true}
+          renderThumbVertical={({ style, ...props }) =>
+            <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
+          }>
           <List>
             {
               Object.values(users)
@@ -36,7 +34,7 @@ class UserList extends React.Component {
                 )
             }
           </List>
-        </ScrollArea>
+        </Scrollbars>
       </div>
     );
   }

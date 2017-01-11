@@ -1,6 +1,6 @@
 import React from 'react';
 import AddChannelDialog from './AddChannelDialog';
-import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { ListItem, List } from 'material-ui/List';
 import NotificationsIcon from 'material-ui/svg-icons/av/fiber-manual-record';
 
@@ -25,14 +25,11 @@ class ChannelList extends React.Component {
           <p className="channel-list-title">Channels</p>
           <AddChannelDialog />
         </div>
-        <ScrollArea
-          speed={0.8}
-          className="channel-list-scroll-area"
-          contentClassName="channel-list-content"
-          horizontal={false}
-          smoothScrolling={true}
-          verticalScrollbarStyle={{background: 'white'}}
-        >
+        <Scrollbars
+          hideTracksWhenNotNeeded={true}
+          renderThumbVertical={({ style, ...props }) =>
+            <div {...props} style={{ ...style, backgroundColor: '#fff' }}/>
+          }>
           <List>
             {
               Object.values(channels)
@@ -55,7 +52,7 @@ class ChannelList extends React.Component {
                   />)
             }
           </List>
-        </ScrollArea>
+        </Scrollbars>
       </div>
     );
   }
