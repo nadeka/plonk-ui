@@ -3,10 +3,8 @@
   height: 220px;
   background: #fff;
   box-sizing: border-box;
-  border-radius: 2px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 2px 15px rgba(0,0,0,0.1);
 }
 
 .emoji-dialog .emoji-dialog-header {
@@ -56,7 +54,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 10px;
+  padding: 5px;
   box-sizing: border-box;
   width: 100%;
   height: calc(100% - 42px);
@@ -84,11 +82,7 @@
 }
 
 .emoji-dialog .emoji-category-header {
-  margin-top: 10px;
-  margin-bottom: 8px;
-  font: 14px 'Roboto', Helvetica, Arial, sans-serif;
-  color: #444;
-  padding: 0 4px;
+  outline: none;
 }
 
 .emoji-dialog .modifiers {
@@ -97,7 +91,7 @@
   margin: 0;
   position: absolute;
   top: 22px;
-  right: 15px;
+  left: 8px;
 }
 
 .emoji-dialog.with-search .modifiers {
@@ -111,7 +105,6 @@
 
 .emoji-dialog .modifiers .modifier {
   display: inline-block;
-  border-radius: 10px;
   width: 15px;
   height: 15px;
   position: relative;
@@ -123,7 +116,6 @@
   position: absolute;
   width: 7px;
   height: 7px;
-  border-radius: 10px;
   border: 2px solid #fff;
   top: 2px;
   left: 2px;
@@ -143,12 +135,16 @@
   padding: 0 5px;
 }
 
+input:focus {
+  outline: none;
+}
+
 .emoji-dialog .emoji-search {
-  font-size: 12px;
-  padding: 6px 4px;
+  font: 12px 'Roboto', Helvetica, Arial, sans-serif;
+  padding: 8px;
   width: 100%;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .emoji-dialog .emoji-category-list li:hover {
@@ -158,4 +154,14 @@
 .emoji-dialog .emoji-category-list .emoji img {
   width: 22px;
   height: 22px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background: #bbb;
 }

@@ -6,10 +6,13 @@ import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore';
-require('./favicon.ico');
-require('./assets/emojione.sprites.png');
-import './styles/styles.scss';
-import './styles/picker.scss';
+
+import './favicon.ico';
+import './assets/images/emojione.sprites.png';
+import './assets/styles/emojione.sprites.scss';
+import './assets/styles/styles.scss';
+import './assets/styles/emoji-picker.scss';
+
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';

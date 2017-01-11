@@ -46,7 +46,10 @@ export default class EmojiPopover extends React.Component {
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
         >
-            <EmojiPicker search={true} onChange={this.props.onChange} />
+            <EmojiPicker
+              search={true}
+              emojione={{ imageType: 'png', sprites: true }}
+              onChange={this.props.onChange} />
         </Popover>
       </div>
     );
