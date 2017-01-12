@@ -4,6 +4,7 @@ import { Schema, arrayOf } from 'normalizr';
 const channel = new Schema('channels');
 const message = new Schema('messages');
 const user = new Schema('users');
+const receivedInvitation = new Schema('receivedInvitations');
 
 // Define nesting rules for schemas
 channel.define({
@@ -18,11 +19,19 @@ message.define({
 
 user.define({
   channels: arrayOf(channel),
-  messages: arrayOf(message)
+  messages: arrayOf(message),
+  receivedInvitations: arrayOf(receivedInvitation)
+});
+
+receivedInvitation.define({
+  invitee: user,
+  inviter: user,
+  channel: channel
 });
 
 module.exports = {
   channel: channel,
   message: message,
-  user: user
+  user: user,
+  receivedInvitation: receivedInvitation
 };

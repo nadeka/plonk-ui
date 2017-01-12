@@ -17,7 +17,8 @@ export class ChannelContainer extends React.Component {
       );
     }
 
-    if (this.props.selectedChannel.users.find(user => user === this.props.userLoggedIn)) {
+    if (this.props.selectedChannel.users &&
+      this.props.selectedChannel.users.find(user => user === this.props.userLoggedIn)) {
       return(
         <div className="channel-page">
           <MessageList {...this.props} />
@@ -49,12 +50,14 @@ const mapStateToProps = (state) => {
 
     selectedChannel: state.reducer.selectedChannel ? state.reducer.channels[state.reducer.selectedChannel] : null,
     userLoggedIn: state.reducer.userLoggedIn,
-    channels: state.reducer.channels,
 
-    // Find users of selected channel
-    users:  Object.values(state.reducer.users)
-      .filter(user => state.reducer.channels[state.reducer.selectedChannel] &&
-      state.reducer.channels[state.reducer.selectedChannel].users.find(u => u === user.id))
+    // Find users of selected channel TODO refactor, think about what to fetch at what time
+    users: state.reducer.channels[state.reducer.selectedChannel] &&
+            state.reducer.channels[state.reducer.selectedChannel].users ?
+              Object.values(state.reducer.users)
+              .filter(user => state.reducer.channels[state.reducer.selectedChannel].users.find(u => u === user.id))
+              :
+              []
   }
 };
 

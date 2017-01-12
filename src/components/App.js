@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import cookie from 'react-cookie';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ChannelContainer from '../containers/ChannelContainer';
 import ChannelListContainer from '../containers/ChannelListContainer';
@@ -7,44 +8,55 @@ import Header from './Header';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import { verifyToken } from '../actions/auth';
+import { closeSnackbar } from '../actions/notifications';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Snackbar from 'material-ui/Snackbar';
 
 // This is a class-based component because the current
 // version of hot reloading won't hot reload a stateless
 // component at the top-level.
 class App extends React.Component {
   componentDidMount() {
-    if (!this.props.userLoggedIn) {
+    if (!this.props.userLoggedIn && cookie.load('accessToken')) {
       this.props.verifyToken();
     }
   }
 
   componentDidUpdate() {
-    if (!this.props.userLoggedIn) {
+    if (!this.props.userLoggedIn && cookie.load('accessToken')) {
       this.props.verifyToken();
     }
   }
 
+  // TODO show different color for error and success in snackbar
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-        {this.props.userLoggedIn ?
-          <div>
-            <div className="header">
-              <Header />
+        <div>
+          {this.props.userLoggedIn ?
+            <div>
+              <div className="header">
+                <Header {...this.props.userLoggedIn} />
+              </div>
+              <div className="main-container">
+                <ChannelListContainer />
+                <ChannelContainer />
+              </div>
             </div>
-            <div className="main-container">
-              <ChannelListContainer />
-              <ChannelContainer />
+            :
+            <div className="form-container">
+              <LoginForm />
+              <RegisterForm />
             </div>
-          </div>
-          :
-          <div className="form-container">
-            <LoginForm />
-            <RegisterForm />
-          </div>
-        }
+          }
+          <Snackbar
+            open={this.props.snackbar.open}
+            message={this.props.snackbar.message}
+            autoHideDuration={2000}
+            onRequestClose={this.props.closeSnackbar}
+          />
+        </div>
       </MuiThemeProvider>
     );
   }
@@ -52,14 +64,18 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    userLoggedIn: state.reducer.userLoggedIn
+    userLoggedIn: state.reducer.userLoggedIn ? state.reducer.users[state.reducer.userLoggedIn] : null,
+    snackbar: state.reducer.snackbar
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     verifyToken: () => {
-      dispatch(verifyToken())
+      dispatch(verifyToken());
+    },
+    closeSnackbar: () => {
+      dispatch(closeSnackbar());
     }
   };
 };

@@ -12,17 +12,9 @@ export function selectChannel(channel) {
   }
 }
 
-export function addingMessage() {
-  return {
-    type: types.ADDING_MESSAGE
-  }
-}
-
 export function addMessage(content, channelid) {
   return function(dispatch) {
-    dispatch(addingMessage());
-
-    let url = API_BASE_URL + `/channels/${ channelid }/messages`;
+    let url = API_BASE_URL + `/channels/${channelid}/messages`;
 
     let headers = {
       'Content-Type': 'application/json'
@@ -39,10 +31,7 @@ export function addMessage(content, channelid) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        // res.json()
-        //   .then(function(json) {
-        //     dispatch(addMessageSuccess(normalize(json, message)));
-        //   })
+        dispatch(addMessageSuccess());
       } else {
         dispatch(addMessageError());
       }
@@ -51,10 +40,9 @@ export function addMessage(content, channelid) {
   }
 }
 
-export function addMessageSuccess(json) {
+export function addMessageSuccess() {
   return {
-    type: types.ADD_MESSAGE_SUCCESS,
-    entities: json.entities
+    type: types.ADD_MESSAGE_SUCCESS
   }
 }
 
@@ -64,33 +52,10 @@ export function addMessageError() {
   }
 }
 
-export function fetchingChannels() {
+export function receiveMessageSuccess(json) {
   return {
-    type: types.FETCHING_CHANNELS
-  }
-}
-
-//TODO fetch only when not in state
-export function fetchChannels() {
-  return function (dispatch) {
-    dispatch(fetchingChannels());
-
-    let url = API_BASE_URL + `/channels`;
-
-    return fetch(url, {
-      method: 'GET',
-      credentials: 'include'
-    }).then(function (res) {
-      if (res.ok) {
-        // res.json()
-        //   .then(function(json) {
-        //     dispatch(fetchChannelsSuccess(normalize(json, arrayOf(channel))));
-        //   });
-      } else {
-        dispatch(fetchChannelsError());
-      }
-    })
-      .catch(err => console.log(err));
+    type: types.RECEIVE_MESSAGE_SUCCESS,
+    entities: json.entities
   }
 }
 
@@ -107,16 +72,8 @@ export function fetchChannelsError() {
   }
 }
 
-export function joiningChannel() {
-  return {
-    type: types.JOINING_CHANNEL
-  }
-}
-
 export function joinChannel(channelid) {
   return function(dispatch) {
-    dispatch(joiningChannel());
-
     let url = API_BASE_URL + `/channels/${channelid}/join`;
 
     return fetch(url, {
@@ -124,10 +81,7 @@ export function joinChannel(channelid) {
       credentials: 'include'
     }).then(function(res) {
       if (res.ok) {
-        // res.json()
-        //   .then(function(json) {
-        //     dispatch(joinSuccess(normalize(json, channel)));
-        //   });
+        dispatch(joinSuccess());
       } else {
         dispatch(joinError());
       }
@@ -136,10 +90,9 @@ export function joinChannel(channelid) {
   }
 }
 
-export function joinSuccess(json) {
+export function joinSuccess() {
   return {
-    type: types.JOIN_SUCCESS,
-    entities: json.entities
+    type: types.JOIN_SUCCESS
   }
 }
 
@@ -149,16 +102,15 @@ export function joinError() {
   }
 }
 
-export function addingChannel() {
+export function receiveMemberSuccess(json) {
   return {
-    type: types.ADDING_CHANNEL
+    type: types.RECEIVE_MEMBER_SUCCESS,
+    entities: json.entities
   }
 }
 
 export function addChannel(values) {
   return function(dispatch) {
-    dispatch(addingChannel());
-
     let url = API_BASE_URL + `/channels`;
 
     let headers = {
@@ -177,10 +129,7 @@ export function addChannel(values) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        res.json()
-          .then(function(json) {
-            dispatch(joinChannel(json.id));
-          })
+        dispatch(addChannelSuccess());
       } else {
         dispatch(addChannelError());
       }
@@ -189,15 +138,69 @@ export function addChannel(values) {
   }
 }
 
-export function addChannelSuccess(json) {
+export function addChannelSuccess() {
   return {
-    type: types.ADD_CHANNEL_SUCCESS,
-    entities: json.entities
+    type: types.ADD_CHANNEL_SUCCESS
   }
 }
 
 export function addChannelError() {
   return {
     type: types.ADD_CHANNEL_ERROR
+  }
+}
+
+export function receiveChannelSuccess(json) {
+  return {
+    type: types.RECEIVE_CHANNEL_SUCCESS,
+    entities: json.entities
+  }
+}
+
+export function inviteUser(values, channelid) {
+  return function(dispatch) {
+    let url = API_BASE_URL + `/channels/${channelid}/invite`;
+
+    let headers = {
+      'Content-Type': 'application/json'
+    };
+
+    let payload = {
+      inviteename: values.inviteename,
+      message: values.message
+    };
+
+    return fetch(url, {
+      method: 'POST',
+      headers: headers,
+      credentials: 'include',
+      body: JSON.stringify(payload)
+    }).then(function(res) {
+      if (res.ok) {
+        dispatch(sendInviteSuccess());
+      } else {
+        dispatch(sendInviteError());
+      }
+    })
+      .catch(err => console.log(err));
+  }
+}
+
+export function sendInviteSuccess() {
+  return {
+    type: types.SEND_INVITE_SUCCESS
+  }
+}
+
+export function sendInviteError() {
+  return {
+    type: types.SEND_INVITE_ERROR
+  }
+}
+
+export function receiveInviteSuccess(json) {
+  return {
+    type: types.RECEIVE_INVITE_SUCCESS,
+    entities: json.entities
   }
 }

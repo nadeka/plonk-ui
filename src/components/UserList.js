@@ -2,6 +2,7 @@ import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { List } from 'material-ui/List';
 import UserListItem from './UserListItem';
+import InviteUserDialog from './InviteUserDialog';
 
 class UserList extends React.Component {
   constructor(props) {
@@ -19,9 +20,16 @@ class UserList extends React.Component {
 
   renderUserListHeader() {
     return (
-      <p className="user-list-title">
-        Members ({this.props.selectedChannel.users.length})
-      </p>
+      <div className="user-list-header">
+        <p className="user-list-title">
+          Members ({this.props.selectedChannel.users.length})
+        </p>
+        {this.props.userLoggedIn === this.props.selectedChannel.creatorid ?
+          <InviteUserDialog selectedChannel={this.props.selectedChannel} />
+          :
+          null
+        }
+      </div>
     )
   }
 

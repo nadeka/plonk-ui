@@ -10,7 +10,13 @@ const initialState = {
   channelsWithNewMessages: {},
   users: [],
   messages: [],
-  channels: []
+  channels: [],
+  receivedInvitations: [],
+  snackbar: {
+    open: false,
+    type: '',
+    message: ''
+  }
 };
 
 // TODO split reducer
@@ -28,40 +34,137 @@ function reducer(state = initialState, action) {
       });
 
     case types.JOIN_SUCCESS:
+      return _.merge({}, state, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Successfully joined channel'
+        }
+      });
+
+    case types.RECEIVE_MEMBER_SUCCESS:
       return _.merge({}, state, action.entities);
 
-    case types.ADD_MESSAGE_SUCCESS:
+    case types.SEND_INVITE_SUCCESS:
+      return _.merge({}, state, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Invite successfully sent'
+        }
+      });
+
+    case types.SEND_INVITE_ERROR:
+      return _.merge({}, state, {
+        snackbar: {
+          open: true,
+          type: 'error',
+          message: 'Invite could not be sent'
+        }
+      });
+
+    case types.RECEIVE_INVITE_SUCCESS:
+      return _.merge({}, state, action.entities, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'You have received an invitation!'
+        }
+      });
+
+    case types.ADD_MESSAGE_ERROR:
+      return _.merge({}, state, {
+        snackbar: {
+          open: true,
+          type: 'error',
+          message: 'Could not send message'
+        }
+      });
+
+    case types.RECEIVE_MESSAGE_SUCCESS:
       return _.merge({}, state, action.entities);
 
     case types.ADD_CHANNEL_SUCCESS:
+      return Object.assign({}, state, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Successfully created channel'
+        }
+      });
+
+    case types.ADD_CHANNEL_ERROR:
+      return Object.assign({}, state, {
+        snackbar: {
+          open: true,
+          type: 'error',
+          message: 'Could not create channel'
+        }
+      });
+
+    case types.RECEIVE_CHANNEL_SUCCESS:
       return _.merge({}, state, action.entities);
 
     case types.FETCH_CHANNELS_SUCCESS:
       return _.merge({}, state, action.entities);
 
-    case types.FETCH_USERS_SUCCESS:
-      return _.merge({}, state, action.entities);
-
     case types.AUTHENTICATE_SUCCESS:
-      return Object.assign({}, state, {
+      return _.merge({}, state, action.entities, {
         userLoggedIn: action.userLoggedIn,
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Successfully logged in'
+        }
       });
 
     case types.AUTHENTICATE_ERROR:
       return Object.assign({}, state, {
-        userLoggedIn: null
+        userLoggedIn: null,
+        snackbar: {
+          open: true,
+          type: 'error',
+          message: 'Authentication unsuccessful'
+        }
       });
 
     case types.REGISTER_SUCCESS:
-      return _.merge({}, state, action.entities, { userLoggedIn: action.userLoggedIn });
+      return _.merge({}, state, action.entities, {
+        userLoggedIn: action.userLoggedIn,
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Successfully registered'
+        }
+      });
 
     case types.REGISTER_ERROR:
       return Object.assign({}, state, {
-        userLoggedIn: null
+        userLoggedIn: null,
+        snackbar: {
+          open: true,
+          type: 'error',
+          message: 'Registration unsuccessful'
+        }
       });
 
     case types.LOGOUT_SUCCESS:
-      return _.merge({}, state, { userLoggedIn: null });
+      return Object.assign({}, initialState, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Successfully logged out'
+        }
+      });
+
+    case types.CLOSE_SNACKBAR:
+      return Object.assign({}, state, {
+        snackbar: {
+          open: false,
+          type: '',
+          message: ''
+        }
+      });
 
     default:
       return state;

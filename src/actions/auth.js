@@ -8,16 +8,8 @@ import fetch from 'isomorphic-fetch';
 
 const API_BASE_URL = require('../constants/urls').API_BASE_URL;
 
-export function verifyingToken() {
-  return {
-    type: types.VERIFYING_TOKEN
-  }
-}
-
 export function verifyToken() {
   return function(dispatch) {
-    dispatch(verifyingToken());
-
     let url = API_BASE_URL + `/reauthenticate`;
 
     return fetch(url, {
@@ -27,28 +19,20 @@ export function verifyToken() {
       if (res.ok) {
         res.json()
           .then(function(json) {
-            dispatch(authenticateSuccess(json.id));
-            dispatch(openConnection());
+            dispatch(openConnection(json.id));
+            dispatch(authenticateSuccess(normalize(json, user), json.id));
           })
       } else {
-        dispatch(authenticateError());
         dispatch(closeConnection());
+        dispatch(authenticateError());
       }
     })
       .catch(err => console.log(err));
   }
 }
 
-export function authenticatingUser() {
-  return {
-    type: types.AUTHENTICATING_USER
-  }
-}
-
 export function authenticateUser(payload) {
   return function(dispatch) {
-    dispatch(authenticatingUser());
-
     let url = API_BASE_URL + `/login`;
 
     let headers = {
@@ -64,21 +48,22 @@ export function authenticateUser(payload) {
       if (res.ok) {
         res.json()
           .then(function(json) {
-            dispatch(authenticateSuccess(json.id));
-            dispatch(openConnection());
+            dispatch(openConnection(json.id));
+            dispatch(authenticateSuccess(normalize(json, user), json.id));
           })
       } else {
-        dispatch(authenticateError());
         dispatch(closeConnection());
+        dispatch(authenticateError());
       }
     })
       .catch(err => console.log(err));
   }
 }
 
-export function authenticateSuccess(userid) {
+export function authenticateSuccess(json, userid) {
   return {
     type: types.AUTHENTICATE_SUCCESS,
+    entities: json.entities,
     userLoggedIn: userid
   }
 }
@@ -89,16 +74,8 @@ export function authenticateError() {
   }
 }
 
-export function registeringUser() {
-  return {
-    type: types.REGISTERING_USER
-  }
-}
-
 export function registerUser(payload) {
   return function(dispatch) {
-    dispatch(registeringUser());
-
     let url = API_BASE_URL + `/register`;
 
     let headers = {
@@ -114,12 +91,12 @@ export function registerUser(payload) {
       if (res.ok) {
         res.json()
           .then(function(json) {
+            dispatch(openConnection(json.id));
             dispatch(registerSuccess(normalize(json, user), json.id));
-            dispatch(openConnection());
           })
       } else {
-        dispatch(registerError());
         dispatch(closeConnection());
+        dispatch(registerError());
       }
     })
       .catch(err => console.log(err));
@@ -140,24 +117,16 @@ export function registerError() {
   }
 }
 
-export function loggingOut() {
-  return {
-    type: types.LOGGING_OUT
-  }
-}
-
 export function logOut() {
   return function(dispatch) {
-    dispatch(loggingOut());
-
     let url = API_BASE_URL + `/logout`;
 
     return fetch(url, {
       method: 'POST',
       credentials: 'include'
     }).then(function(res) {
-      dispatch(logoutSuccess());
       dispatch(closeConnection());
+      dispatch(logoutSuccess());
     })
       .catch(err => console.log(err));
   }

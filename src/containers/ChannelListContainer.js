@@ -23,7 +23,6 @@ const mapStateToProps = (state) => {
     nonJoinedChannels: Object.values(state.reducer.channels).filter(channel => channel
     && (!channel.users || !channel.users.find(id => id === state.reducer.userLoggedIn))),
 
-    userLoggedIn: state.reducer.userLoggedIn,
     selectedChannel: state.reducer.selectedChannel,
     channelsWithNewMessages: state.reducer.channelsWithNewMessages
   }

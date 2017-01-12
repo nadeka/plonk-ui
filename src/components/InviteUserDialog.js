@@ -2,13 +2,15 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import AddChannelForm from './AddChannelForm';
+import InviteUserForm from './InviteUserForm';
 
-export default class AddChannelDialog extends React.Component {
+export default class InviteUserDialog extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { open: false };
+    this.state = {
+      open: false
+    };
 
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -28,7 +30,7 @@ export default class AddChannelDialog extends React.Component {
 
   render() {
     return (
-      <div className="add-channel-dialog">
+      <div className="invite-user-dialog">
         {this.renderOpenDialogButton()}
         {this.renderDialog()}
       </div>
@@ -52,12 +54,13 @@ export default class AddChannelDialog extends React.Component {
   renderDialog() {
     return (
       <Dialog
-        title='Create new channel'
+        title='Invite member'
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}>
-        <AddChannelForm
+        <InviteUserForm
           handleClose={() => this.handleClose()}
+          channel={this.props.selectedChannel}
         />
       </Dialog>
     )

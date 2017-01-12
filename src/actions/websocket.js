@@ -1,25 +1,33 @@
 import { normalize, arrayOf } from 'normalizr';
-import { channel, message } from './schemas';
+import { channel, message, receivedInvitation } from './schemas';
 import cookie from 'react-cookie';
 import {
   fetchChannelsSuccess,
   fetchChannelsError,
-  addChannelSuccess,
-  joinSuccess,
-  addMessageSuccess
+  receiveChannelSuccess,
+  receiveMemberSuccess,
+  receiveMessageSuccess,
+  receiveInviteSuccess
 } from './channels';
 import Nes from 'nes/client';
 
 const client = new Nes.Client(require('../constants/urls').WS_BASE_URL);
 
-export function openConnection() {
+// TODO use ws for adding channels and messages etc
+export function openConnection(userid) {
   return function(dispatch) {
+    client.onDisconnect = function(willReconnect, log) {
+      console.log(willReconnect);
+      console.log(log);
+    };
+
     client.connect({
       auth: {
         headers: {
           'Cookie': 'accessToken=' + cookie.load('accessToken')
         }
-      }
+      },
+      reconnect: false
     }, function(err) {
         if (err) {
           console.log(err);
@@ -27,7 +35,7 @@ export function openConnection() {
           // dispatch(connectionError());
         }
         else {
-          dispatch(connectionSuccess());
+          dispatch(connectionSuccess(userid));
         }
       });
   }
@@ -35,12 +43,16 @@ export function openConnection() {
 
 export function closeConnection() {
   return function(dispatch) {
+    client.subscriptions().forEach(sub => client.unsubscribe(sub, null, function(err) {
+      console.log(err);
+    }));
+
     client.disconnect();
   }
 }
 
 //TODO refactor
-export function connectionSuccess() {
+export function connectionSuccess(userid) {
   return function(dispatch) {
     client.request({
       path: '/channels',
@@ -58,11 +70,12 @@ export function connectionSuccess() {
     });
 
     client.subscribe('/new-channel', function (newChannel, flags) {
-      dispatch(addChannelSuccess(normalize(newChannel, channel)));
+      dispatch(receiveChannelSuccess(normalize(newChannel, channel)));
     }, function (err) {
       console.log(err);
     });
 
+    // TODO only listen to new messages in joined channels
     client.subscribe('/new-message', function (newMessage, flags) {
       let entities = normalize(newMessage, message);
 
@@ -71,13 +84,21 @@ export function connectionSuccess() {
 
       entities.entities.channelsWithNewMessages[newMessage.channelid] = newMessage.channelid;
 
-      dispatch(addMessageSuccess(entities));
+      dispatch(receiveMessageSuccess(entities));
     }, function (err) {
       console.log(err);
     });
 
+
+    // TODO only listen to new members in joined channels
     client.subscribe('/user-joined', function (updatedChannel, flags) {
-      dispatch(joinSuccess(normalize(updatedChannel, channel)));
+      dispatch(receiveMemberSuccess(normalize(updatedChannel, channel)));
+    }, function (err) {
+      console.log(err);
+    });
+
+    client.subscribe(`/users/${userid}/invitations`, function (newInvitation, flags) {
+      dispatch(receiveInviteSuccess(normalize(newInvitation, receivedInvitation)));
     }, function (err) {
       console.log(err);
     });
