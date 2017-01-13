@@ -16,11 +16,6 @@ const client = new Nes.Client(require('../constants/urls').WS_BASE_URL);
 // TODO use ws for adding channels and messages etc
 export function openConnection(user) {
   return function(dispatch) {
-    client.onDisconnect = function(willReconnect, log) {
-      console.log(willReconnect);
-      console.log(log);
-    };
-
     client.connect({
       auth: {
         headers: {
@@ -51,8 +46,25 @@ export function closeConnection() {
   }
 }
 
-//TODO refactor
 export function connectionSuccess(user) {
+  return function(dispatch) {
+    dispatch(fetchChannels());
+
+    dispatch(fetchChannelsOfUser(user.id));
+
+    dispatch(subscribeToNewChannels());
+
+    // Subscribe to new messages and members in joined channels
+    user.channels.forEach(channelid => function() {
+      dispatch(subscribeToNewMessages(channelid));
+      dispatch(subscribeToNewMembers(channelid));
+    });
+
+    dispatch(subscribeToNewInvitations(user.id));
+  };
+}
+
+export function fetchChannels() {
   return function(dispatch) {
     client.request({
       path: '/channels',
@@ -68,19 +80,26 @@ export function connectionSuccess(user) {
         dispatch(fetchChannelsSuccess(normalize(channels, arrayOf(channel))));
       }
     });
+  }
+}
 
-    console.log(user);
-
-    dispatch(subscribeToNewChannels());
-
-    // Subscribe to new messages and members in joined channels
-    user.channels.forEach(channel => function() {
-      dispatch(subscribeToNewMessages(channel.id));
-      dispatch(subscribeToNewMembers(channel.id));
+export function fetchChannelsOfUser(userid) {
+  return function(dispatch) {
+    client.request({
+      path: `/users/${userid}/channels`,
+      headers: {
+        'Cookie': 'accessToken=' + cookie.load('accessToken')
+      }
+    }, function (err, channels) {
+      if (err) {
+        console.log(err);
+        dispatch(fetchChannelsError());
+      }
+      else {
+        dispatch(fetchChannelsSuccess(normalize(channels, arrayOf(channel))));
+      }
     });
-
-    dispatch(subscribeToNewInvitations(user.id));
-  };
+  }
 }
 
 export function subscribeToNewMessages(channelid) {

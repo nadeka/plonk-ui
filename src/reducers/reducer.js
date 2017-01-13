@@ -72,6 +72,9 @@ function reducer(state = initialState, action) {
         }
       });
 
+    case types.ADD_MESSAGE_SUCCESS:
+      return _.merge({}, state, action.entities);
+
     case types.ADD_MESSAGE_ERROR:
       return _.merge({}, state, {
         snackbar: {

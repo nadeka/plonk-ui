@@ -17,8 +17,8 @@ export class ChannelListContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    joinedChannels: Object.values(state.reducer.channels).filter(channel => channel
-    && channel.users && channel.users.find(id => id === state.reducer.userLoggedIn)),
+    joinedChannels: Object.values(state.reducer.channels)
+      .filter(channel => channel.users && channel.users.find(id => id === state.reducer.userLoggedIn)),
 
     nonJoinedChannels: Object.values(state.reducer.channels).filter(channel => channel
     && (!channel.users || !channel.users.find(id => id === state.reducer.userLoggedIn))),

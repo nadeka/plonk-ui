@@ -1,6 +1,6 @@
 import * as types from '../constants/actionTypes';
 import { normalize } from 'normalizr';
-import { channel } from './schemas';
+import { channel, message } from './schemas';
 import { subscribeToNewMembers, subscribeToNewMessages } from './websocket';
 
 // Some browsers do not natively support fetch API
@@ -34,7 +34,10 @@ export function addMessage(content, channelid) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        dispatch(addMessageSuccess());
+        res.json()
+          .then(function(json) {
+            dispatch(addMessageSuccess(normalize(json, message)));
+          });
       } else {
         dispatch(addMessageError());
       }
@@ -43,9 +46,10 @@ export function addMessage(content, channelid) {
   }
 }
 
-export function addMessageSuccess() {
+export function addMessageSuccess(json) {
   return {
-    type: types.ADD_MESSAGE_SUCCESS
+    type: types.ADD_MESSAGE_SUCCESS,
+    entities: json.entities
   }
 }
 
@@ -102,7 +106,6 @@ export function joinSuccess(json) {
   return {
     type: types.JOIN_SUCCESS,
     entities: json.entities
-
   }
 }
 
