@@ -19,7 +19,7 @@ export function verifyToken() {
       if (res.ok) {
         res.json()
           .then(function(json) {
-            dispatch(openConnection(json.id));
+            dispatch(openConnection(json));
             dispatch(authenticateSuccess(normalize(json, user), json.id));
           })
       } else {
@@ -48,7 +48,7 @@ export function authenticateUser(payload) {
       if (res.ok) {
         res.json()
           .then(function(json) {
-            dispatch(openConnection(json.id));
+            dispatch(openConnection(json));
             dispatch(authenticateSuccess(normalize(json, user), json.id));
           })
       } else {
@@ -91,7 +91,7 @@ export function registerUser(payload) {
       if (res.ok) {
         res.json()
           .then(function(json) {
-            dispatch(openConnection(json.id));
+            dispatch(openConnection(json));
             dispatch(registerSuccess(normalize(json, user), json.id));
           })
       } else {

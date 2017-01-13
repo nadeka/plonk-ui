@@ -14,7 +14,7 @@ import Nes from 'nes/client';
 const client = new Nes.Client(require('../constants/urls').WS_BASE_URL);
 
 // TODO use ws for adding channels and messages etc
-export function openConnection(userid) {
+export function openConnection(user) {
   return function(dispatch) {
     client.onDisconnect = function(willReconnect, log) {
       console.log(willReconnect);
@@ -35,7 +35,7 @@ export function openConnection(userid) {
           // dispatch(connectionError());
         }
         else {
-          dispatch(connectionSuccess(userid));
+          dispatch(connectionSuccess(user));
         }
       });
   }
@@ -52,7 +52,7 @@ export function closeConnection() {
 }
 
 //TODO refactor
-export function connectionSuccess(userid) {
+export function connectionSuccess(user) {
   return function(dispatch) {
     client.request({
       path: '/channels',
@@ -69,14 +69,23 @@ export function connectionSuccess(userid) {
       }
     });
 
-    client.subscribe('/new-channel', function (newChannel, flags) {
-      dispatch(receiveChannelSuccess(normalize(newChannel, channel)));
-    }, function (err) {
-      console.log(err);
+    console.log(user);
+
+    dispatch(subscribeToNewChannels());
+
+    // Subscribe to new messages and members in joined channels
+    user.channels.forEach(channel => function() {
+      dispatch(subscribeToNewMessages(channel.id));
+      dispatch(subscribeToNewMembers(channel.id));
     });
 
-    // TODO only listen to new messages in joined channels
-    client.subscribe('/new-message', function (newMessage, flags) {
+    dispatch(subscribeToNewInvitations(user.id));
+  };
+}
+
+export function subscribeToNewMessages(channelid) {
+  return function(dispatch) {
+    client.subscribe(`/channels/${channelid}/new-message`, function (newMessage, flags) {
       let entities = normalize(newMessage, message);
 
       // TODO better solution for notifications on unread messages
@@ -88,19 +97,35 @@ export function connectionSuccess(userid) {
     }, function (err) {
       console.log(err);
     });
+  }
+}
 
-
-    // TODO only listen to new members in joined channels
-    client.subscribe('/user-joined', function (updatedChannel, flags) {
+export function subscribeToNewMembers(channelid) {
+  return function(dispatch) {
+    client.subscribe(`/channels/${channelid}/new-member`, function (updatedChannel, flags) {
       dispatch(receiveMemberSuccess(normalize(updatedChannel, channel)));
     }, function (err) {
       console.log(err);
     });
+  }
+}
 
+export function subscribeToNewChannels() {
+  return function(dispatch) {
+    client.subscribe('/new-channel', function (newChannel, flags) {
+      dispatch(receiveChannelSuccess(normalize(newChannel, channel)));
+    }, function (err) {
+      console.log(err);
+    });
+  }
+}
+
+export function subscribeToNewInvitations(userid) {
+  return function(dispatch) {
     client.subscribe(`/users/${userid}/invitations`, function (newInvitation, flags) {
       dispatch(receiveInviteSuccess(normalize(newInvitation, receivedInvitation)));
     }, function (err) {
       console.log(err);
     });
-  };
+  }
 }

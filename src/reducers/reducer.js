@@ -34,7 +34,7 @@ function reducer(state = initialState, action) {
       });
 
     case types.JOIN_SUCCESS:
-      return _.merge({}, state, {
+      return _.merge({}, state, action.entities, {
         snackbar: {
           open: true,
           type: 'success',

@@ -1,4 +1,7 @@
 import * as types from '../constants/actionTypes';
+import { normalize } from 'normalizr';
+import { channel } from './schemas';
+import { subscribeToNewMembers, subscribeToNewMessages } from './websocket';
 
 // Some browsers do not natively support fetch API
 import fetch from 'isomorphic-fetch';
@@ -81,7 +84,12 @@ export function joinChannel(channelid) {
       credentials: 'include'
     }).then(function(res) {
       if (res.ok) {
-        dispatch(joinSuccess());
+        res.json()
+          .then(function(json) {
+            dispatch(subscribeToNewMembers(channelid));
+            dispatch(subscribeToNewMessages(channelid));
+            dispatch(joinSuccess(normalize(json, channel)));
+          })
       } else {
         dispatch(joinError());
       }
@@ -90,9 +98,11 @@ export function joinChannel(channelid) {
   }
 }
 
-export function joinSuccess() {
+export function joinSuccess(json) {
   return {
-    type: types.JOIN_SUCCESS
+    type: types.JOIN_SUCCESS,
+    entities: json.entities
+
   }
 }
 
