@@ -1,13 +1,13 @@
 body {
   font: 12px 'Roboto', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #000;
+  color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
   font-smoothing: antialiased;
   font-weight: 300;
-  margin: 3em;
+  margin: 0.7em 2em 0 2em;
 }
 
 .form-container {
@@ -35,12 +35,10 @@ body {
   display: flex;
   -webkit-flex-flow: row wrap;
   flex-flow: row wrap;
-  margin: -10px;
+  height: 75vh;
 }
 
 .main-container > * {
-  flex: 1 60%;
-  margin: 10px;
   word-wrap: break-word;
 }
 
@@ -66,6 +64,12 @@ body {
   display: flex;
   -webkit-flex-flow: column;
   flex-flow: column;
+  flex: 4;
+}
+
+.user-list {
+  flex: 1;
+  margin-left: 2.5em;
 }
 
 .channel-list {
@@ -76,6 +80,7 @@ body {
   display: flex;
   -webkit-flex-flow: column;
   flex-flow: column;
+  flex: 1;
 }
 
 .channel-list-header, .user-list-header {
@@ -84,20 +89,20 @@ body {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  padding-bottom: 10px;
+  padding-bottom: 0.5em;
 }
 
 .channel-list-title, .user-list-title {
   margin-right: 0.3em;
 }
 
-.channel-list-joined-subheader, .channel-list-not-joined-subheader {
+.channel-list-joined-subheader {
   font-size: 14px;
   font-weight: bold;
 }
 
 .toolbar-user-logged-in-name {
-  margin-right: 2em;
+  margin-right: 1.5em;
   font-size: 14px;
 }
 
@@ -112,14 +117,11 @@ body {
   display: -webkit-flex;
   display: flex;
   align-items: flex-end;
-  margin: 0 -10px;
-  position: fixed;
-  bottom: 2em;
-  justify-content: center;
+  margin-top: 1em;
 }
 
 .add-message-form > * {
-  margin: 0 10px;
+  margin: 0 0.3em;
 }
 
 .channel-list-title, .message-list-title, .user-list-title, .register-title, .login-title {
@@ -134,40 +136,17 @@ body {
   display: flex;
   -webkit-flex-flow: row;
   flex-flow: row;
+  flex: 4;
+  justify-content: space-between;
+  margin-left: 2.5em;
 }
 
 .message-list-channel-name {
   font-size: 16px;
-  margin-left: 10px;
+  margin-left: 0.7em;
   color: #9E9E9E;
 }
 
-.channel-page > * {
-  padding: 10px;
-  flex: 1 60%;
-}
-
 .header {
-  margin-bottom: 2em;
-}
-
-@media (min-height: 600px) {
-  .message-list { height: 450px; }
-  .channel-list { height: 450px; }
-  .user-list { height: 450px; }
-}
-
-@media (min-width: 900px) {
-  .message-list { width: 500px; }
-  .channel-list { width: 100px; }
-  .user-list { width: 10px; }
-}
-
-@media all and (min-width: 600px) {
-  .channel-list { flex: 1 auto; }
-  .user-list { flex: 1 auto; }
-}
-
-@media all and (min-width: 800px) {
-  .message-list    { flex: 3 0px; }
+  margin-bottom: 1em;
 }

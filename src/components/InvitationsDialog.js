@@ -4,6 +4,7 @@ import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
+import NotificationsNoneIcon from 'material-ui/svg-icons/social/notifications-none';
 import { joinChannel } from '../actions/channels';
 import InvitationList from '../components/InvitationList';
 
@@ -45,10 +46,17 @@ export class InvitationsDialog extends React.Component {
       <IconButton
         onTouchTap={this.handleOpen}
       >
-        <NotificationsIcon
-          color='#fff'
-          hoverColor="#9E9E9E"
-        />
+        {this.props.invitations.length > 0 ?
+          <NotificationsIcon
+            color='#fff'
+            hoverColor="#9E9E9E"
+          />
+          :
+          <NotificationsNoneIcon
+            color='#fff'
+            hoverColor="#9E9E9E"
+          />
+        }
       </IconButton>
     )
   }

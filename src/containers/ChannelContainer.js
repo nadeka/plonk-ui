@@ -13,7 +13,9 @@ export class ChannelContainer extends React.Component {
   render() {
     if (!this.props.selectedChannel) {
       return(
-        <p>Welcome!</p>
+        <div className="channel-page">
+          <p>Welcome!</p>
+        </div>
       );
     }
 

@@ -144,7 +144,6 @@ export function addChannel(values) {
       if (res.ok) {
         res.json()
           .then(function(json) {
-            dispatch(addChannelSuccess(normalize(json, channel)));
             dispatch(joinChannel(json.id));
           })
       } else {
