@@ -142,7 +142,11 @@ export function addChannel(values) {
       body: JSON.stringify(payload)
     }).then(function(res) {
       if (res.ok) {
-        dispatch(addChannelSuccess());
+        res.json()
+          .then(function(json) {
+            dispatch(addChannelSuccess(normalize(json, channel)));
+            dispatch(joinChannel(json.id));
+          })
       } else {
         dispatch(addChannelError());
       }
@@ -151,9 +155,10 @@ export function addChannel(values) {
   }
 }
 
-export function addChannelSuccess() {
+export function addChannelSuccess(json) {
   return {
-    type: types.ADD_CHANNEL_SUCCESS
+    type: types.ADD_CHANNEL_SUCCESS,
+    entities: json.entities
   }
 }
 

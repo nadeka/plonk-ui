@@ -51,7 +51,7 @@ class InvitationListItem extends React.Component {
               <FlatButton
                 style={{backgroundColor: '#fff', color: '#000'}}
                 label="Accept invitation"
-                onClick={() => this.props.joinChannel(this.props.channel.id)}>
+                onClick={() => this.props.joinChannel(this.props.channelid)}>
               </FlatButton>
             </div>
           </div>

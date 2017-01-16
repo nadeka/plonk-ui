@@ -72,7 +72,7 @@ class ChannelList extends React.Component {
   renderNonJoinedChannels() {
     return (
       this.props.nonJoinedChannels.length < 1 ?
-        <p>No more channels to join.</p>
+        <p>No channels to join.</p>
         :
         this.props.nonJoinedChannels.map(channel => this.renderChannelListItem(channel))
     )

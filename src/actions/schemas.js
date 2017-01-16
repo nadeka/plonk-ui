@@ -12,21 +12,10 @@ channel.define({
   users: arrayOf(user)
 });
 
-message.define({
-  sender: user,
-  channel: channel
-});
-
 user.define({
   channels: arrayOf(channel),
   messages: arrayOf(message),
   receivedInvitations: arrayOf(receivedInvitation)
-});
-
-receivedInvitation.define({
-  invitee: user,
-  inviter: user,
-  channel: channel
 });
 
 module.exports = {

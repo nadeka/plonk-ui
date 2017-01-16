@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import NotificationsDialog from './InvitationsDialog';
 import LogoutForm from './LogoutForm';
 
@@ -17,7 +17,8 @@ export default class Header extends React.Component {
     return (
       <Toolbar style={toolBarStyle}>
         <ToolbarGroup firstChild={true}>
-      </ToolbarGroup>
+          <ToolbarTitle text='Plonk' />
+        </ToolbarGroup>
         <ToolbarGroup>
           <NotificationsDialog />
           <div>

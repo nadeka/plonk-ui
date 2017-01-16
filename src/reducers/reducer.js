@@ -24,13 +24,13 @@ function reducer(state = initialState, action) {
   switch (action.type) {
 
     case types.SELECT_CHANNEL:
-      let copy = Object.assign({}, state.channelsWithNewMessages);
-      delete copy[action.channel];
-      delete copy[state.selectedChannel];
+      let channelsWithNewMessagesCopy = Object.assign({}, state.channelsWithNewMessages);
+      delete channelsWithNewMessagesCopy[action.channel];
+      delete channelsWithNewMessagesCopy[state.selectedChannel];
 
       return Object.assign({}, state, {
         selectedChannel: action.channel,
-        channelsWithNewMessages: copy
+        channelsWithNewMessages: channelsWithNewMessagesCopy
       });
 
     case types.JOIN_SUCCESS:
@@ -50,7 +50,7 @@ function reducer(state = initialState, action) {
         snackbar: {
           open: true,
           type: 'success',
-          message: 'Invite successfully sent'
+          message: 'Invitation successfully sent'
         }
       });
 
@@ -59,7 +59,7 @@ function reducer(state = initialState, action) {
         snackbar: {
           open: true,
           type: 'error',
-          message: 'Invite could not be sent'
+          message: 'Invitation could not be sent'
         }
       });
 
@@ -88,7 +88,7 @@ function reducer(state = initialState, action) {
       return _.merge({}, state, action.entities);
 
     case types.ADD_CHANNEL_SUCCESS:
-      return Object.assign({}, state, {
+      return _.merge({}, state, action.entities, {
         snackbar: {
           open: true,
           type: 'success',
@@ -109,6 +109,9 @@ function reducer(state = initialState, action) {
       return _.merge({}, state, action.entities);
 
     case types.FETCH_CHANNELS_SUCCESS:
+      return _.merge({}, state, action.entities);
+
+    case types.FETCH_RECEIVED_INVITATIONS_SUCCESS:
       return _.merge({}, state, action.entities);
 
     case types.AUTHENTICATE_SUCCESS:
@@ -164,7 +167,7 @@ function reducer(state = initialState, action) {
       return Object.assign({}, state, {
         snackbar: {
           open: false,
-          type: '',
+          type: state.snackbar.type,
           message: ''
         }
       });

@@ -29,7 +29,6 @@ class App extends React.Component {
     }
   }
 
-  // TODO show different color for error and success in snackbar
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
@@ -54,6 +53,8 @@ class App extends React.Component {
             open={this.props.snackbar.open}
             message={this.props.snackbar.message}
             autoHideDuration={2000}
+            bodyStyle={this.props.snackbar.type === 'error' ? {background: '#E53935'} : {background: '#4CAF50'}}
+            contentStyle={{color: '#fff', fontWeight: 'bold'}}
             onRequestClose={this.props.closeSnackbar}
           />
         </div>

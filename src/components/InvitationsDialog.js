@@ -86,13 +86,7 @@ export class InvitationsDialog extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    // Attach inviter to each invitation
     invitations: Object.values(state.reducer.receivedInvitations).sort(compare)
-      .map(invitation =>
-        Object.assign({}, invitation, {
-          inviter: state.reducer.users[invitation.inviterid],
-          channel: state.reducer.channels[invitation.channelid]
-        }))
   }
 };
 

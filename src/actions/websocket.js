@@ -2,6 +2,10 @@ import { normalize, arrayOf } from 'normalizr';
 import { channel, message, receivedInvitation } from './schemas';
 import cookie from 'react-cookie';
 import {
+  fetchReceivedInvitationsError,
+  fetchReceivedInvitationsSuccess
+} from './users';
+import {
   fetchChannelsSuccess,
   fetchChannelsError,
   receiveChannelSuccess,
@@ -13,9 +17,18 @@ import Nes from 'nes/client';
 
 const client = new Nes.Client(require('../constants/urls').WS_BASE_URL);
 
-// TODO use ws for adding channels and messages etc
+// TODO use ws for adding channels and messages
 export function openConnection(user) {
   return function(dispatch) {
+    // TODO think about what to show user on disconnect/error
+    client.onDisconnect = function(willReconnect, log) {
+      dispatch(connectionError());
+    };
+
+    client.onError = function(err) {
+      dispatch(connectionError());
+    };
+
     client.connect({
       auth: {
         headers: {
@@ -25,9 +38,7 @@ export function openConnection(user) {
       reconnect: false
     }, function(err) {
         if (err) {
-          console.log(err);
-          // TODO error handling for ws connections
-          // dispatch(connectionError());
+          dispatch(connectionError());
         }
         else {
           dispatch(connectionSuccess(user));
@@ -39,9 +50,17 @@ export function openConnection(user) {
 export function closeConnection() {
   return function(dispatch) {
     client.subscriptions().forEach(sub => client.unsubscribe(sub, null, function(err) {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
     }));
 
+    client.disconnect();
+  }
+}
+
+export function connectionError() {
+  return function(dispatch) {
     client.disconnect();
   }
 }
@@ -49,17 +68,9 @@ export function closeConnection() {
 export function connectionSuccess(user) {
   return function(dispatch) {
     dispatch(fetchChannels());
-
-    dispatch(fetchChannelsOfUser(user.id));
-
+    dispatch(fetchChannelsOfUser());
+    dispatch(fetchReceivedInvitationsOfUser());
     dispatch(subscribeToNewChannels());
-
-    // Subscribe to new messages and members in joined channels
-    user.channels.forEach(channelid => function() {
-      dispatch(subscribeToNewMessages(channelid));
-      dispatch(subscribeToNewMembers(channelid));
-    });
-
     dispatch(subscribeToNewInvitations(user.id));
   };
 }
@@ -83,10 +94,10 @@ export function fetchChannels() {
   }
 }
 
-export function fetchChannelsOfUser(userid) {
+export function fetchChannelsOfUser() {
   return function(dispatch) {
     client.request({
-      path: `/users/${userid}/channels`,
+      path: `/user/channels`,
       headers: {
         'Cookie': 'accessToken=' + cookie.load('accessToken')
       }
@@ -96,7 +107,31 @@ export function fetchChannelsOfUser(userid) {
         dispatch(fetchChannelsError());
       }
       else {
+        channels.forEach(channel => function() {
+          dispatch(subscribeToNewMessages(channel.id));
+          dispatch(subscribeToNewMembers(channel.id));
+        });
+
         dispatch(fetchChannelsSuccess(normalize(channels, arrayOf(channel))));
+      }
+    });
+  }
+}
+
+export function fetchReceivedInvitationsOfUser() {
+  return function(dispatch) {
+    client.request({
+      path: `/user/receivedInvitations`,
+      headers: {
+        'Cookie': 'accessToken=' + cookie.load('accessToken')
+      }
+    }, function (err, invitations) {
+      if (err) {
+        console.log(err);
+        dispatch(fetchReceivedInvitationsError());
+      }
+      else {
+        dispatch(fetchReceivedInvitationsSuccess(normalize(invitations, arrayOf(receivedInvitation))));
       }
     });
   }
@@ -114,7 +149,9 @@ export function subscribeToNewMessages(channelid) {
 
       dispatch(receiveMessageSuccess(entities));
     }, function (err) {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
     });
   }
 }
@@ -124,7 +161,9 @@ export function subscribeToNewMembers(channelid) {
     client.subscribe(`/channels/${channelid}/new-member`, function (updatedChannel, flags) {
       dispatch(receiveMemberSuccess(normalize(updatedChannel, channel)));
     }, function (err) {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
     });
   }
 }
@@ -134,7 +173,9 @@ export function subscribeToNewChannels() {
     client.subscribe('/new-channel', function (newChannel, flags) {
       dispatch(receiveChannelSuccess(normalize(newChannel, channel)));
     }, function (err) {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
     });
   }
 }
@@ -144,7 +185,9 @@ export function subscribeToNewInvitations(userid) {
     client.subscribe(`/users/${userid}/invitations`, function (newInvitation, flags) {
       dispatch(receiveInviteSuccess(normalize(newInvitation, receivedInvitation)));
     }, function (err) {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
     });
   }
 }

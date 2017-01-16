@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-// TODO make it better
 const NotFoundPage = () => {
   return (
     <div>

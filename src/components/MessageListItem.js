@@ -14,7 +14,7 @@ class MessageListItem extends React.Component {
         primaryText={
           <div className="message">
             <div className="message-title">
-              <p>{this.props.sender}
+              <p>{this.props.user.name}
                 <span className="message-date"> {moment(this.props.createdat).format('lll')}</span>
               </p>
             </div>

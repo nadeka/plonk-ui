@@ -78,7 +78,7 @@ body {
   flex-flow: column;
 }
 
-.channel-list-header {
+.channel-list-header, .user-list-header {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -87,8 +87,8 @@ body {
   padding-bottom: 10px;
 }
 
-.channel-list-title {
-  margin-right: 0.7em;
+.channel-list-title, .user-list-title {
+  margin-right: 0.3em;
 }
 
 .channel-list-joined-subheader, .channel-list-not-joined-subheader {
@@ -145,6 +145,10 @@ body {
 .channel-page > * {
   padding: 10px;
   flex: 1 60%;
+}
+
+.header {
+  margin-bottom: 2em;
 }
 
 @media (min-height: 600px) {

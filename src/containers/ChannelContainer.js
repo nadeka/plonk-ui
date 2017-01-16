@@ -43,10 +43,9 @@ export class ChannelContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    // Find messages of selected channel and attach sender name to each message
+    // Find messages of selected channel
     messages: Object.values(state.reducer.messages)
-      .filter(message => message.channelid === state.reducer.selectedChannel)
-      .map(message => Object.assign({}, message, {sender: state.reducer.users[message.userid].name})),
+      .filter(message => message.channelid === state.reducer.selectedChannel),
 
     selectedChannel: state.reducer.selectedChannel ? state.reducer.channels[state.reducer.selectedChannel] : null,
     userLoggedIn: state.reducer.userLoggedIn,
