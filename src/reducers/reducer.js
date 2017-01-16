@@ -72,6 +72,36 @@ function reducer(state = initialState, action) {
         }
       });
 
+    case types.DELETE_RECEIVED_INVITATION_SUCCESS:
+      let receivedInvitationsCopy = Object.assign({}, state.receivedInvitations);
+      delete receivedInvitationsCopy[action.invitationid];
+
+      return Object.assign({}, state, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'Invitation deleted'
+        },
+        receivedInvitations: receivedInvitationsCopy
+      });
+
+      return _.merge({}, state, {
+        snackbar: {
+          open: true,
+          type: 'success',
+          message: 'You have received an invitation!'
+        }
+      });
+
+    case types.DELETE_RECEIVED_INVITATION_ERROR:
+      return _.merge({}, state, {
+        snackbar: {
+          open: true,
+          type: 'error',
+          message: 'Could not delete invitation'
+        }
+      });
+
     case types.ADD_MESSAGE_SUCCESS:
       return _.merge({}, state, action.entities);
 

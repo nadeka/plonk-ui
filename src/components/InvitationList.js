@@ -25,6 +25,7 @@ class InvitationList extends React.Component {
           <InvitationListItem
             key={invitation.id}
             joinChannel={this.props.joinChannel}
+            deleteReceivedInvitation={this.props.deleteReceivedInvitation}
             {...invitation}
           />)
         }

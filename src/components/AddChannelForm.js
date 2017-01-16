@@ -17,7 +17,7 @@ class AddChannelForm extends React.Component {
       <form className="add-channel-form" onSubmit={this.props.handleSubmit}>
         {this.renderNameTextField()}
         {this.renderPrivateCheckbox()}
-        <div style={{ textAlign: 'left', padding: 8, margin: '24px -24px -24px -24px' }}>
+        <div style={{ textAlign: 'left', padding: 25, margin: '24px -24px -24px -24px' }}>
           {this.renderSubmitButton()}
           {this.renderCancelButton()}
         </div>

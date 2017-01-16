@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import NotificationsNoneIcon from 'material-ui/svg-icons/social/notifications-none';
 import { joinChannel } from '../actions/channels';
+import { deleteReceivedInvitation } from '../actions/users';
 import InvitationList from '../components/InvitationList';
 
 export class InvitationsDialog extends React.Component {
@@ -74,6 +75,7 @@ export class InvitationsDialog extends React.Component {
         <InvitationList
           invitations={this.props.invitations}
           joinChannel={this.props.joinChannel}
+          deleteReceivedInvitation={this.props.deleteReceivedInvitation}
           handleClose={() => this.handleClose()}
         />
       </Dialog>
@@ -114,6 +116,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     joinChannel: (channel) => {
       dispatch(joinChannel(channel));
+    },
+    deleteReceivedInvitation: (invitation) => {
+      dispatch(deleteReceivedInvitation(invitation));
     }
   }
 };
