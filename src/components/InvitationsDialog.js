@@ -72,13 +72,19 @@ export class InvitationsDialog extends React.Component {
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
-        <InvitationList
-          invitations={this.props.invitations}
-          joinChannel={this.props.joinChannel}
-          deleteReceivedInvitation={this.props.deleteReceivedInvitation}
-          handleClose={() => this.handleClose()}
-        />
+        {this.renderInvitationList()}
       </Dialog>
+    )
+  }
+
+  renderInvitationList() {
+    return (
+      <InvitationList
+        invitations={this.props.invitations}
+        joinChannel={this.props.joinChannel}
+        deleteReceivedInvitation={this.props.deleteReceivedInvitation}
+        handleClose={() => this.handleClose()}
+      />
     )
   }
 
@@ -96,16 +102,16 @@ export class InvitationsDialog extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    invitations: Object.values(state.reducer.receivedInvitations).sort(compare)
+    invitations: Object.values(state.reducer.receivedInvitations).sort(compareCreationDate)
   }
 };
 
-function compare(a, b) {
-  if (a.createdat > b.createdat) {
+function compareCreationDate(inv1, inv2) {
+  if (inv1.createdat > inv2.createdat) {
     return -1;
   }
 
-  if (a.createdat < b.createdat) {
+  if (inv1.createdat < inv2.createdat) {
     return 1;
   }
 

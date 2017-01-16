@@ -34,32 +34,50 @@ class App extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
         <div>
           {this.props.userLoggedIn ?
-            <div>
-              <div className="header">
-                <Header {...this.props.userLoggedIn} />
-              </div>
-              <div className="main-container">
-                <ChannelListContainer />
-                <ChannelContainer />
-              </div>
-            </div>
+            this.renderMainContainer()
             :
-            <div className="form-container">
-              <LoginForm />
-              <RegisterForm />
-            </div>
+            this.renderLoginAndRegisterPage()
           }
-          <Snackbar
-            open={this.props.snackbar.open}
-            message={this.props.snackbar.message}
-            autoHideDuration={2000}
-            bodyStyle={this.props.snackbar.type === 'error' ? {background: '#E53935'} : {background: '#4CAF50'}}
-            contentStyle={{color: '#fff', fontWeight: 'bold'}}
-            onRequestClose={this.props.closeSnackbar}
-          />
+          {this.renderSnackbar()}
         </div>
       </MuiThemeProvider>
     );
+  }
+
+  renderMainContainer() {
+    return (
+      <div>
+        <div className="header">
+          <Header {...this.props.userLoggedIn} />
+        </div>
+        <div className="main-container">
+          <ChannelListContainer />
+          <ChannelContainer />
+        </div>
+      </div>
+    )
+  }
+
+  renderLoginAndRegisterPage() {
+    return (
+      <div className="form-container">
+        <LoginForm />
+        <RegisterForm />
+      </div>
+    )
+  }
+
+  renderSnackbar() {
+    return (
+      <Snackbar
+        open={this.props.snackbar.open}
+        message={this.props.snackbar.message}
+        autoHideDuration={2000}
+        bodyStyle={this.props.snackbar.type === 'error' ? {background: '#E53935'} : {background: '#4CAF50'}}
+        contentStyle={{color: '#fff', fontWeight: 'bold'}}
+        onRequestClose={this.props.closeSnackbar}
+      />
+    )
   }
 }
 

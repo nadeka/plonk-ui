@@ -17,7 +17,7 @@ import Nes from 'nes/client';
 
 const client = new Nes.Client(require('../constants/urls').WS_BASE_URL);
 
-// TODO use ws for adding channels and messages
+// TODO use ws for adding channels and messages etc
 export function openConnection(user) {
   return function(dispatch) {
     // TODO think about what to show user on disconnect/error
